@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="166.36795mm"
+   height="157.0249mm"
+   viewBox="0 0 166.36795 157.0249"
+   version="1.1"
+   id="svg4190"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   sodipodi:docname="RedCross.svg">
+  <defs
+     id="defs4184" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="-194.71544"
+     inkscape:cy="134.0714"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata4187">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-28.461912,-27.281488)">
+    <rect
+       style="fill:#d40000;stroke-width:0.41760209"
+       id="rect4258"
+       width="181.54665"
+       height="35.338734"
+       x="-94.080193"
+       y="-165.1851"
+       ry="0"
+       transform="matrix(-0.76912499,0.63909838,-0.7372909,-0.67557541,0,0)"
+       rx="0" />
+    <rect
+       style="fill:#d40000;stroke-width:0.41760209"
+       id="rect4258-8"
+       width="181.54665"
+       height="35.338734"
+       x="70.470947"
+       y="-28.723101"
+       ry="0"
+       transform="matrix(0.70370008,0.71049715,-0.6087455,0.79336556,0,0)"
+       rx="0" />
+  </g>
+</svg>

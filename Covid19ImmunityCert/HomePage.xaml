@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="Covid19ImmunityCert.HomePage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+    Padding="0,40,0,0"
+    BackgroundColor="#791AE5"
+    NavigationPage.HasNavigationBar="False">
+    <ScrollView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <StackLayout>
+            <Grid Margin="0,0,0,0">
+                <StackLayout Margin="20,0,20,0" Spacing="20">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="28"
+                        HorizontalOptions="StartAndExpand"
+                        Text="Stopping COVID-19 spreading"
+                        TextColor="White"
+                        VerticalOptions="StartAndExpand"
+                        WidthRequest="200" />
+                </StackLayout>
+                <Image
+                    HorizontalOptions="EndAndExpand"
+                    Source="bgImageCovid19"
+                    WidthRequest="200" />
+            </Grid>
+            <yummy:PancakeView
+                Margin="0,30,0,0"
+                Padding="30,0,30,30"
+                BackgroundColor="White"
+                CornerRadius="40,40,0,0"
+                VerticalOptions="FillAndExpand">
+                <StackLayout>
+                    <Label
+                        Margin="20"
+                        FontAttributes="Bold"
+                        FontSize="20"
+                        HorizontalOptions="CenterAndExpand"
+                        HorizontalTextAlignment="Center"
+                        Text="What would you like to do?"
+                        TextColor="#791AE5"
+                        VerticalOptions="Center" />
+                    <Grid Margin="5" ColumnSpacing="20" RowSpacing="30">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="230" />
+                            <RowDefinition Height="230" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <yummy:PancakeView
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Padding="10"
+                            BackgroundColor="White"
+                            BorderThickness="1"
+                            CornerRadius="15"
+                            Elevation="3">
+                            <StackLayout>
+                                <Image Source="provideProof" />
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="20"
+                                    HorizontalOptions="CenterAndExpand"
+                                    HorizontalTextAlignment="Center"
+                                    Text="Provide Proof Immunity Certificate"
+                                    TextColor="Black"
+                                    VerticalOptions="CenterAndExpand" />
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="ProvideProofCertificateClicked" />
+                                </StackLayout.GestureRecognizers>
+                            </StackLayout>
+                        </yummy:PancakeView>
+                        <yummy:PancakeView
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Padding="10"
+                            BackgroundColor="White"
+                            BorderThickness="1"
+                            CornerRadius="15"
+                            Elevation="3">
+                            <StackLayout>
+                                <Image Source="validateUsers" />
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="20"
+                                    HorizontalOptions="CenterAndExpand"
+                                    HorizontalTextAlignment="Center"
+                                    Text="Check Immunity Certificate"
+                                    TextColor="Black"
+                                    VerticalOptions="CenterAndExpand" />
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="CheckImmunityCertificateClicked" />
+                                </StackLayout.GestureRecognizers>
+                            </StackLayout>
+                        </yummy:PancakeView>
+                        <yummy:PancakeView
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Padding="10"
+                            BackgroundColor="White"
+                            BorderThickness="1"
+                            CornerRadius="15"
+                            Elevation="3">
+                            <StackLayout>
+                                <Image Source="testAdminArea" />
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="20"
+                                    HorizontalOptions="CenterAndExpand"
+                                    HorizontalTextAlignment="Center"
+                                    Text="Test Centre: Create new certificate"
+                                    TextColor="Black"
+                                    VerticalOptions="CenterAndExpand" />
+                            </StackLayout>
+                        </yummy:PancakeView>
+                        <yummy:PancakeView
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Padding="10"
+                            BackgroundColor="White"
+                            BorderThickness="1"
+                            CornerRadius="15"
+                            Elevation="3">
+                            <StackLayout>
+                                <Image Source="userIdentity" />
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="20"
+                                    HorizontalOptions="CenterAndExpand"
+                                    HorizontalTextAlignment="Center"
+                                    Text="Your Identity"
+                                    TextColor="Black"
+                                    VerticalOptions="CenterAndExpand" />
+                            </StackLayout>
+                        </yummy:PancakeView>
+                    </Grid>
+                </StackLayout>
+
+            </yummy:PancakeView>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>
