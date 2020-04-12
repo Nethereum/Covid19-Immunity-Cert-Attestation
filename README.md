@@ -1,6 +1,6 @@
 # Covid19 Immunity Certification and attestation PoC
 
-This is a PoC of a way to enable a person and / or institution to verify another person has a valid immunity certificate. 
+This is a PoC of a way to enable a person and / or institution to verify another person has a valid immunity certificate, that hopefully can inspire or help anyone working on this, feel free to use anything here. Remember to credit correctly if you use any images / icons.
 
 ## Why?
 
