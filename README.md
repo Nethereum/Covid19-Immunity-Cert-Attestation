@@ -128,3 +128,125 @@ https://www.svgrepo.com/svg/40592/nurse
 Blood Test Icon
 https://www.svgrepo.com/svg/96961/blood-test
 
+
+## Certificate creation 
+
+This is an example of how the certificates are created, you can copy this and run it in the Nethereum playground http://playground.nethereum.com
+
+```csharp
+using System;
+using System.Text;
+using Nethereum.Hex.HexConvertors.Extensions;
+using System.Threading.Tasks;
+using Nethereum.Web3;
+using Nethereum.Signer;
+using Nethereum.Util;
+
+public class Program
+{
+
+    static async Task Main(string[] args)
+    {
+				//The test centre Id could be an ipfs hash that includes all the information (maybe a did including endpoints to ethereum and ipfs gateways)
+				var testCentreId = "100";
+				var testCentreSupervisorPrivateKey = "0xb5b1870957d373ef0eeffecc6e4812c0fd08f554b37b233526acc331bf1544f7"; 
+				//cheating use the same
+				var userAddress = "0x12890d2cce102216644c59daE5baed380d84830c";
+				// The users photo ipfs hash 
+				// An ugly man smiling here:
+				// https://gateway.pinata.cloud/ipfs/QmbtqAxAnEqumx9k8wx8yxyANpC5vVwvQsdSWUQof9NP2o
+				var photoId = "QmbtqAxAnEqumx9k8wx8yxyANpC5vVwvQsdSWUQof9NP2o";
+				Console.WriteLine("Full certificate generated:");
+				Console.WriteLine(CertificateService.CreateCertificate(userAddress, testCentreId, testCentreSupervisorPrivateKey, photoId).FullCertificate);
+    }
+
+		public class CertificateService
+    {
+        public static SignedCertificate CreateCertificate(string userAddress, string testCentreId, string privateKey, string photoUserId)
+        {
+            var ethEcKey = new Nethereum.Signer.EthECKey(privateKey);
+            var signer = new Nethereum.Signer.EthereumMessageSigner();
+            var signerAddress = ethEcKey.GetPublicAddress();
+            var signature = signer.EncodeUTF8AndSign(SignedCertificate.GetRawCertificate(userAddress, signerAddress, testCentreId, photoUserId), ethEcKey);
+            return new SignedCertificate(userAddress, signerAddress, testCentreId, photoUserId, signature); 
+        }
+    }
+
+
+		public class SignedCertificate
+    {
+        public static string GetRawCertificate(string userAddres, string signerAddress, string testCentreId, string photoId)
+        {
+            return $"{userAddres},{signerAddress},{testCentreId},{photoId}";
+        }
+        /// <summary>
+        /// The full certificate containing the "UserAddress,SignerAddress,TestCentreAddress,Signature"
+        /// </summary>
+        public string FullCertificate { get; private set; }
+
+        /// <summary>
+        /// The certificate containing the value "UserAddress,SignerAddress,TestCentreAddress"
+        /// </summary>
+        public string RawCertificate { get => GetRawCertificate(UserAddress,SignerAddress,TestCentreId, PhotoId); }
+        /// <summary>
+        /// The User Address (Unique Identifier for the current signed certificate) 
+        /// </summary>
+        public string UserAddress { get; private set; }
+        /// <summary>
+        /// The Signer Address (Unique Identifier for the signer) (this would be ideally the Test Supervisor of the TestCentre)
+        /// </summary>
+        public string SignerAddress { get; private set; }
+        /// <summary>
+        /// The Test Centre Address or Unique Identifier (An address could be used for signing verification purpouses or ENS to resolve it)
+        /// </summary>
+        public string TestCentreId { get; private set; }
+        /// <summary>
+        /// Photo IPFS Hash of the User Photo
+        /// </summary>
+        public string PhotoId { get; private set; }
+        /// <summary>
+        /// The Test Centre Address or Unique Identifier (An address could be used for signing verification purpouses or ENS to resolve it)
+        /// </summary>
+        public string Signature { get; private set; }
+
+        public SignedCertificate(string fullCertificate)
+        {
+            this.FullCertificate = fullCertificate;
+            InitialiseFromFullCertificate(fullCertificate);
+        }
+
+        public SignedCertificate(string userAddress, string signerAddress, string testCentreId, string photoId, string signature)
+        {
+            this.UserAddress = userAddress;
+            this.SignerAddress = signerAddress;
+            this.TestCentreId = testCentreId;
+            this.PhotoId = photoId;
+            this.Signature = signature;
+            GenerateFullCertificate();
+        }
+
+        private void GenerateFullCertificate()
+        {
+            FullCertificate = $"{UserAddress},{SignerAddress},{TestCentreId},{PhotoId},{Signature}";
+        }
+
+        private void InitialiseFromFullCertificate(string fullCertificate)
+        {
+            var values = fullCertificate.Split(',');
+            UserAddress = values[0];
+            SignerAddress = values[1];
+            TestCentreId = values[2];
+            PhotoId = values[3];
+            Signature = values[4];
+        }
+
+        public bool IsCertificateValid()
+        {
+            var signer = new EthereumMessageSigner();
+            var recoveredAddress = signer.EncodeUTF8AndEcRecover(RawCertificate, Signature);
+            return recoveredAddress.IsTheSameAddress(SignerAddress);
+        }
+    }
+}
+                
+```
