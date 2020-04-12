@@ -106,6 +106,7 @@ Assuming that we store 500kb photos in IPFS, we would need 1TB for around 2 mill
 + Create certificate process screens
 + Register test centre
 + Invalidate certificate
++ Semi connected scenarios, can we sync with Ethereum data to enable to validate locally..
 
 ## Credits for resources used
 
