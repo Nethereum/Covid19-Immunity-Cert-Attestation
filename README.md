@@ -1,9 +1,8 @@
 # Covid19 Immunity Certification and attestation PoC
 
-This is a PoC of a way to enable a person and / or institution to verify another person has a valid immunity certificate. Hopefully this can inspire or help anyone working on this, feel free to use anything here. Remember to credit correctly if you use any images / icons.
+This is a PoC of a way to enable a person and / or institution to verify another person has a valid immunity certificate. Hopefully this can inspire or help anyone working on this, feel free to use anything here. Remember to credit correctly if you use any images / icons (see links at the bottom for attributions for those resources)
 
-Current progress: Mobile application(s) validation process flow completed, currently working on finishing smart contracts and general documentation (this readme)
-
+Current progress: Mobile application(s) validation process flow completed, currently working on finishing smart contracts
 ## Why?
 
 As testing of immunity for corona virus becomes more widely available, it will allow us to start helping people or visiting family members that are at risk, happily knowing that we won't put them at danger.
