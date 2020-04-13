@@ -5,12 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ChasedHomeUIDesign.iOS")]
+[assembly: AssemblyTitle("Covid19ImmunityCert.iOS")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ChasedHomeUIDesign.iOS")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
+[assembly: AssemblyProduct("Covid19ImmunityCert.iOS")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
