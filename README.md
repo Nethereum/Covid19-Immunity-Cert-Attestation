@@ -14,33 +14,36 @@ Obviously there are many other scenarios like returning to work, resuming live e
 
 ## Constraints
 
-Certificates need to be borderless (not specific to a country), maintain user privacy, cheap to create using existing technology, should work in semi disconnected scenarios, and not require some government id as these are not required in some countries or children may not have one, and limit the information provide to avoid discrimination(could be used for positive discrimination or negative in case of an invalid test). 
+Certificates need to be borderless (not specific to a country), maintain user privacy, cheap to create using existing technology, should work in semi disconnected scenarios, and not require some government id as these are not required in some countries or children may not have one, and limit the information to avoid discrimination (could be used for positive discrimination or negative in case of an invalid test). 
 
 ## Technology
 
-This example it includes an Android and iOS mobile applications leveraging the cameras to communicate and exchange certificate and challenge information using QR codes.
+The example includes an Android and iOS mobile application which can be used both by the certificate validator and the owner of the certificate, communinication between both devices is done exchanging qr codes.
 
-Ethereum smart contract (public) to store valid Test Centres, Test Centre Signers, Expired / Invalidated Certificates etc. 
+Ethereum smart contract (public) to store valid Test Centres, Test Centre certificate issuers (who creates and sign the certificates), Expired / Invalidated Certificates, Test Centres or Issuers (which may invalidate previous certificates). 
 
-This is limited to to Test Centres as opposed to individual certificates to allow for scalability (7 billions versus and approx of 700,000 test centres handling 10,000 people each)
+The data stored in smart contracts is limited to test centres and certficate as opposed to individual certificates to simplify scalability (7 billions versus and approx of 700,000 test centres handling 10,000 people each).
 
-Ethereum accounts and Ethereum message signing
+Ethereum accounts to integrate with Ethereum but also enable secp256k1 to sign and validate certificates.
 
 IPFS to store users photos to enable physical validation of certificates
 
-## What this won't do
+## What this won't do or it is out of scope at the moment
 + Demonstrate storage in test centres of certificates, results, etc.
-+ DIDs, decentralised identity usage as we just want to create a simple certificate that can be used by any technology (literally comma separated values)
++ DIDs, decentralised identity usage as we just want to create a simple certificate that can be used by any technology (literally comma separated values). This could / will be upgraded in the future.
 
 ## Certification Validation Process
-![Check Immunity Certificate, selection 'Generate Challenge'](/uml/CovidCertValidationProcess/Check%20Immunity%20Certificate%20Process.png "Check Immunity Certificate, selection 'Generate Challenge'")
+![Check Immunity Certificate sequence diagram'](/uml/CovidCertValidationProcess/Check%20Immunity%20Certificate%20Process.png "Check Immunity Certificate sequence diagram")
+
+| Step     |    Actor(s)              |  Description                                 |            Screenshot       |
+|----------|:------------------------:|----------------------------------------------|----------------------------:|
+| 1 |  Certificate Validator -> Validator Mobile      |Open screen Check Immunity Certificate          | <img src="screenshots/HomePage.png" width="160px" height="320px" alt="Home page screen, selection 'Check Immunity Certificate'"/>|
 
 
+## Certification Validation Process
 
-## Validating the response and the certificate
-Validating the response will do the following:
 
-1. Retrieve the certificate from the QR response
+1. Scan the QR code with the signed
 2. Validate the certificate, which will check if the signature of the certificate matches the data included in the certificate. 
 The data included in the certificate as per the current example is:
 
