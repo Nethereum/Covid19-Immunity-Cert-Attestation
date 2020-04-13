@@ -33,6 +33,7 @@ IPFS to store users photos to enable physical validation of certificates
 + DIDs, decentralised identity usage as we just want to create a simple certificate that can be used by any technology (literally comma separated values)
 
 ## Certification Validation Process
+![Check Immunity Certificate, selection 'Generate Challenge'](/uml/CovidCertValidationProcess/Check%20Immunity%20Certificate%20Process.png "Check Immunity Certificate, selection 'Generate Challenge'")
 
 
 
