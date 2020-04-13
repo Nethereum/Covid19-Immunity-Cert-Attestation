@@ -3,6 +3,8 @@
 This is a PoC of a way to enable a person and / or institution to verify another person has a valid immunity certificate. Hopefully this can inspire or help anyone working on this, feel free to use anything here. Remember to credit correctly if you use any images / icons (see links at the bottom for attributions for those resources)
 
 Current progress: Mobile application(s) validation process flow completed, currently working on finishing smart contracts
+
+
 Please feel free to ping me (Juan @juanfranblanco twitter) for a chat if you want to help and make some pull:)
 
 ## Why?
