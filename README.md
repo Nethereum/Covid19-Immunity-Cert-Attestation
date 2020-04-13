@@ -16,7 +16,7 @@ Obviously there are many other scenarios like returning to work, resuming live e
 
 ## Constraints
 
-Certificates need to be borderless (not specific to a country), maintain user privacy, cheap to create using existing technology, should work in semi disconnected scenarios, and not require some government id as these are not required in some countries or children may not have one, and limit the information to avoid discrimination (could be used for positive discrimination or negative in case of an invalid test). 
+Certificates need to be borderless (not specific to a country), maintain user privacy, cheap to create using existing technology, should work in semi disconnected scenarios, and not require some government id as these are not required in some countries or children may not have one, limit the information to avoid discrimination (could be used for positive discrimination or negative in case of an invalid test). 
 
 ## Technology
 
@@ -46,6 +46,13 @@ IPFS to store users photos to enable physical validation of certificates
 	</tr>
 	<tr>
 		<td>2</td><td>Certificate Validator -> Validator Mobile</td>
+		<td><b>"Check Immunity Certificate" screen, generate challenge</b><br> The certificate validator will generate a unique "qr code" challenge and wait for the certificate owner to scan it to validate its identity. This unique challenge (some random text) will be signed by the validator using its private key which if matched to the cert owners id (ethereum address) to validate authenticity. There might be scenarios that some unique challenge could be shared across different people to speed up the process, for example a long queue.</td>
+		<td> <img src="screenshots/CheckImmunityCertficate-Step1-GenerateChallenge.png"  width="160" height="320" alt="Check Immunity Certificate, selection 'Generate Challenge'"/>
+		<img src="screenshots/CheckImmunityCertficate-Step2-ChallengeGenerated-WaitToScanResponse.png"  width="160" height="320" alt="Check Immunity Certificate, selection 'Generated Challenge wait for scan response'"/><
+		</td>
+	</tr>
+	<tr>
+		<td>3</td><td>Certificate Validator -> Validator Mobile</td>
 		<td><b>"Check Immunity Certificate" screen, generate challenge</b><br> The certificate validator will generate a unique "qr code" challenge for the certificate owner to scan and validate its identity</td>
 		<td> <img src="screenshots/CheckImmunityCertficate-Step1-GenerateChallenge.png"  width="160" height="320" alt="Check Immunity Certificate, selection 'Generate Challenge'"/></td>
 	</tr>
