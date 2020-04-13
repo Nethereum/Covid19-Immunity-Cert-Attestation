@@ -1,29 +1,34 @@
 @startuml
-title __Generic purchasing process__
-actor "Buyer" as Buyer
+title __Check Immunity Certificate Process__
+actor "Certificate Validator" as CertificateValidator
+boundary "Validator Mobile" as ValidatorMobile
+boundary "Cert Owner Mobile" as CertOwnerMobile
+actor "Certificate Owner" as CertificateOwner
+participant "Ethereum Immunity Registry Smart Contract" as ImmunityRegistrySmartContract
+participant "IPFS Storage" as IPFSStorage
 
-actor "Procurement Department" as ProcurementDepartment
-boundary "Buyer System" as BuyerSystem
-participant "Ethereum Purchase Smart Contract" as PurchaseContract
-boundary "Seller System" as SellerSystem
-actor "Seller" as Sellerf
-
-Buyer -> BuyerSystem: Raise purchase requisition
-BuyerSystem -> ProcurementDepartment: Send to procurement department
-ProcurementDepartment -> BuyerSystem: Send RFQ
-BuyerSystem -> SellerSystem: Send RFQ
-SellerSystem --> BuyerSystem: Response Quotation
-ProcurementDepartment -> BuyerSystem: Raise PO
-BuyerSystem -> BuyerSystem: Approve PO
-BuyerSystem -> SellerSystem: Send PO
-SellerSystem-> Seller: Receives PO
-Seller -> SellerSystem: Create Saler Order
-Seller -> SellerSystem: Customer credit check, approvals
-Seller -> SellerSystem: Fullfil Saler Order (Procurement, Services, Manufacture, 3rd Party)
-Seller -> SellerSystem: Internal Warehouse mgt, pick pack ship
-Seller -> Buyer: Delivery goods
-Buyer -> Buyer: Verify goods
-Seller -> Buyer: Invoice
-Buyer -> Buyer: Invoice verification
-Buyer  -> Seller: Pay Invoice
+CertificateValidator -> ValidatorMobile: Open screen Check Immunity Certificate
+CertificateValidator -> ValidatorMobile: Generate "unique qr code challenge" to verify certificate identity
+CertificateOwner -> CertOwnerMobile: Open screen Provide Proof Certificate
+CertificateOwner -> CertOwnerMobile: Scan "unique qr code challenge" to verify certificate
+CertOwnerMobile -> ValidatorMobile: Scan "unique qr code challenge" to verify certificate
+CertOwnerMobile -> CertOwnerMobile: Get Certificate from secure storage
+CertOwnerMobile -> CertOwnerMobile: Get Private Key from secure storage
+CertOwnerMobile -> CertOwnerMobile: Sign Challenge with Private Key
+CertOwnerMobile -> CertOwnerMobile: Generate QR Response (Certificate + Signed Challenge)
+CertificateValidator -> ValidatorMobile: Scan QR Response (Certificate + Signed Challenge)
+ValidatorMobile-> CertOwnerMobile: Scan QR Response (Certificate + Signed Challenge)
+ValidatorMobile-> ValidatorMobile: Extract certificate and signed challenge
+ValidatorMobile-> ValidatorMobile: Validate certificate (signature certificate corresponds all the values in certificate)
+ValidatorMobile-> ValidatorMobile: Validate Signed Challenge (signature challenge is correct and matches the certifiate owner)
+ValidatorMobile-> ImmunityRegistrySmartContract: Validate Certificate
+ImmunityRegistrySmartContract -> ImmunityRegistrySmartContract: Validate certificate (signature certificate corresponds all the values in certificate)
+ImmunityRegistrySmartContract -> ImmunityRegistrySmartContract: Validate Signed Challenge (signature challenge is correct and matches the certifiate owner)
+ImmunityRegistrySmartContract -> ImmunityRegistrySmartContract: Validate Certificate Signer from Test Centre is registered and matches Test Centre
+ImmunityRegistrySmartContract -> ImmunityRegistrySmartContract: Validate Certificate has not expired or has not been invalidated
+ImmunityRegistrySmartContract -> ImmunityRegistrySmartContract: Validate TestCentre or TestCentreSigner has not been invalidated
+ImmunityRegistrySmartContract -> ValidatorMobile: Validation Response
+ValidatorMobile -> IPFSStorage: Get Photo of User in Certificate
+ValidatorMobile -> ValidatorMobile: Display Validation Succesful and Photo of User
+CertificateValidator -> CertificateOwner: Physical validation of users photo
 @enduml
