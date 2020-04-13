@@ -1,0 +1,29 @@
+@startuml
+title __Generic purchasing process__
+actor "Buyer" as Buyer
+
+actor "Procurement Department" as ProcurementDepartment
+boundary "Buyer System" as BuyerSystem
+participant "Ethereum Purchase Smart Contract" as PurchaseContract
+boundary "Seller System" as SellerSystem
+actor "Seller" as Sellerf
+
+Buyer -> BuyerSystem: Raise purchase requisition
+BuyerSystem -> ProcurementDepartment: Send to procurement department
+ProcurementDepartment -> BuyerSystem: Send RFQ
+BuyerSystem -> SellerSystem: Send RFQ
+SellerSystem --> BuyerSystem: Response Quotation
+ProcurementDepartment -> BuyerSystem: Raise PO
+BuyerSystem -> BuyerSystem: Approve PO
+BuyerSystem -> SellerSystem: Send PO
+SellerSystem-> Seller: Receives PO
+Seller -> SellerSystem: Create Saler Order
+Seller -> SellerSystem: Customer credit check, approvals
+Seller -> SellerSystem: Fullfil Saler Order (Procurement, Services, Manufacture, 3rd Party)
+Seller -> SellerSystem: Internal Warehouse mgt, pick pack ship
+Seller -> Buyer: Delivery goods
+Buyer -> Buyer: Verify goods
+Seller -> Buyer: Invoice
+Buyer -> Buyer: Invoice verification
+Buyer  -> Seller: Pay Invoice
+@enduml
