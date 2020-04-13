@@ -2,6 +2,8 @@
 
 This is a PoC of a way to enable a person and / or institution to verify another person has a valid immunity certificate. Hopefully this can inspire or help anyone working on this, feel free to use anything here. Remember to credit correctly if you use any images / icons.
 
+Current progress: Mobile application(s) validation process flow completed, currently working on finishing smart contracts and general documentation (this readme)
+
 ## Why?
 
 As testing of immunity for corona virus becomes more widely available, it will allow us to start helping people or visiting family members that are at risk, happily knowing that we won't put them at danger.
@@ -28,7 +30,7 @@ Ethereum accounts to integrate with Ethereum but also enable secp256k1 to sign a
 
 IPFS to store users photos to enable physical validation of certificates
 
-## What this won't do or it is out of scope at the moment
+## What this won't do or it is out of scope at the moment (pragmatism based on current circunstances)
 + Demonstrate storage in test centres of certificates, results, etc.
 + DIDs, decentralised identity usage as we just want to create a simple certificate that can be used by any technology (literally comma separated values). This could / will be upgraded in the future.
 
