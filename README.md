@@ -35,6 +35,34 @@ IPFS to store users photos to enable physical validation of certificates
 + DIDs, decentralised identity usage as we just want to create a simple certificate that can be used by any technology (literally comma separated values). This could / will be upgraded in the future.
 
 ## Certification Validation Process
+The process of validating a certificate is the following.
+1. The validator will generate a challenge (random text) for the owner of the certificate to sign with the private key and account which is part of the certificate, this will be display as a QR Code.
+2. The QR challenge will be scan and signed by the owner of the certificate and respond as another QR code containing both the certificate and the signature of the challenge.
+3. The Certificate validator will scan now the QR response and start the validation process.
+4. First will validate the certificate, by checking if the signature of the certificate matches the data included in the certificate. 
+The data included in the certificate as per the current example is:
+
+* Test centre id (The test centre where the certificate originates)
+* Test centre signer (Who has validated the test results and has created the certificate in the test centre)
+* User / certificate id (ethereum address to uniquely identify the certificate and to validate user)
+* User photo hash (IPFS hash to validate the user physically)
+* Signature (To validate the data has not been tampered and check the test centre signer)
+
+3. Validate the challenge signature, using the certificate and the signed challenge, we will be able to validate the user matchs the one in the certificate
+
+4. We will connect to an Ethereum smart contract (assumed public) to validate the following.
+* Is the test centre id valid and has not been flagged as invalid test centre (for example bad batch of test kits, batch could be added to the certificate)
+* Is the signer valid and included in the approved signers
+* Is the certificate valid, and has not been forced to expiry (ie further checks has invalidated the immunity)
+
+
+### Physical validation
+An IPFS hash of a photo of the user is included in the certificate, so the person validated the certification can check the certificate belongs to the person without requiring any other form of identification or id attached to the certificate as these might not be available in some countries. This could prevent also lending a device / certificate to another person. 
+
+#### Storage 
+Assuming that we store 500kb photos in IPFS, we would need 1TB for around 2 million photos.
+
+## Certification Validation Process Sequence diagram and screen flows
 ![Check Immunity Certificate sequence diagram'](/uml/CovidCertValidationProcess/Check%20Immunity%20Certificate%20Process.png "Check Immunity Certificate sequence diagram")
 
 <table>
@@ -69,44 +97,41 @@ IPFS to store users photos to enable physical validation of certificates
 		<td> <img src="screenshots/ProvideProof-Step3-SignedCertificateWithChallengSigned.png"  width="160" height="320" alt="Certificate with challenge signed"/>
 		</td>
 	</tr>
-</table>
-
-### Check Immunity Certificate- Validate certificate response
-After generating a challenge and being signed by the person we want to validate the certificate, we will scan it and then check the certificate signature.
-
-![Check Immunity Certificate, scanning response](screenshots/CheckImmunityCertficate-Step3-ScanningResponse.png "Check Immunity Certificate, scanning response")
-
-Once the scan has been complicated we will get a response as follows if is valid:
-
-![Check Immunity Certificate, valid response](screenshots/CheckImmunityCertficate-Step4-ResponseValid.png "Check Immunity Certificate, valid response")	
-	
-## Certification Validation Process
-
-
-1. Scan the QR code with the signed
+	<tr>
+		<td>5</td><td>Certificate Validator -> Certificate Validator Mobile -> Certificate Owner Mobile</td>
+		<td><b>Validator, scan Certificate Owner response and validate response and certificate</b><br> 
+		To validate the the certificate and signed challenge, the validators mobile device will: <br>	
+		1. Scan the QR code with the signed <br>
 2. Validate the certificate, which will check if the signature of the certificate matches the data included in the certificate. 
-The data included in the certificate as per the current example is:
+The data included in the certificate as per the current example is: <br>
 
-* Test centre id (The test centre where the certificate originates)
-* Test centre signer (Who has validated the test results and has created the certificate in the test centre)
-* User / certificate id (ethereum address to uniquely identify the certificate and to validate user)
-* User photo hash (IPFS hash to validate the user physically)
-* Signature (To validate the data has not been tampered and check the test centre signer)
+* Test centre id (The test centre where the certificate originates) <br>
+* Test centre signer (Who has validated the test results and has created the certificate in the test centre) <br>
+* User / certificate id (ethereum address to uniquely identify the certificate and to validate user) <br>
+* User photo hash (IPFS hash to validate the user physically) <br>
+* Signature (To validate the data has not been tampered and check the test centre signer) <br>
 
-3. Validate the challenge signature, using the certificate and the signed challenge, we will be able to validate the user matchs the one in the certificate
+3. Validate the challenge signature, using the certificate and the signed challenge, we will be able to validate the user matchs the one in the certificate <br>
 
-4. We will connect to an Ethereum smart contract (assumed public) to validate the following.
-* Is the test centre id valid and has not been flagged as invalid test centre (for example bad batch of test kits, batch could be added to the certificate)
-* Is the signer valid and included in the approved signers
+4. We will connect to an Ethereum smart contract (assumed public) to validate the following. <br>
+* Is the test centre id valid and has not been flagged as invalid test centre (for example bad batch of test kits, batch could be added to the certificate) <br>
+* Is the signer valid and included in the approved signers <br>
 * Is the certificate valid, and has not been forced to expiry (ie further checks has invalidated the immunity)
 
-
-### Physical validation
-An IPFS hash of a photo of the user is included in the certificate, so the person validated the certification can check the certificate belongs to the person without requiring any other form of identification or id attached to the certificate as these might not be available in some countries. This could prevent also lending a device / certificate to another person. 
-
-#### Storage 
-Assuming that we store 500kb photos in IPFS, we would need 1TB for around 2 million photos.
-
+5. Finally it will retrieve from IPFS the certificate owners photograph to display it on the screen<br>
+		</td>
+		<td> <img src="screenshots/CheckImmunityCertficate-Step3-ScanningResponse.png"  width="160" height="320" alt="Certificate with challenge signed"/>
+		</td>
+	</tr>
+	<tr>
+		<td>6</td><td>Certificate Validator -> Certificate Validator Mobile -> Certificate Owner</td>
+		<td><b>Display validation result and physically validate certificate owner photograph</b><br> 
+		An IPFS hash of a photo of the user is included in the certificate, so the person validated the certification can check the certificate belongs to the person without requiring any other form of identification or id attached to the certificate as these might not be available in some countries. This could prevent also lending a device / certificate to another person. 
+		</td>
+		<td> <img src="screenshots/CheckImmunityCertficate-Step4-ResponseValid.png"  width="160" height="320" alt="Check Immunity Certificate, valid response""/>
+		</td>
+	</tr>
+</table>
 
 
 ## TODO
