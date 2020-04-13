@@ -37,11 +37,21 @@ IPFS to store users photos to enable physical validation of certificates
 ## Certification Validation Process
 ![Check Immunity Certificate sequence diagram'](/uml/CovidCertValidationProcess/Check%20Immunity%20Certificate%20Process.png "Check Immunity Certificate sequence diagram")
 
-| Step     |    Actor(s)              |  Description                                 |            Screenshot       |
-|----------|:------------------------:|----------------------------------------------|----------------------------:|
-| 1 |  Certificate Validator -> Validator Mobile      |Open screen Check Immunity Certificate          | <img src="screenshots/HomePage.png" width="160px" height="320px" alt="Home page screen, selection 'Check Immunity Certificate'"/>|
-
-
+<table>
+	<tr><th>Step</th><th> Actor(s)</th> <th> Description</th><th width="160">Screenshot</><tr>
+	<tr>
+		<td>1</td><td>Certificate Validator -> Validator Mobile</td>
+		<td><b>Open screen Check Immunity Certificate</b><br> The certificate validator will select from the home screen the menu item "Check Immunity Certificate" to start the validation process</td>
+		<td> <img src="screenshots/HomePage.png" width="160px" height="320px" alt="Home page screen, selection 'Check Immunity Certificate'"/></td>
+	</tr>
+	<tr>
+		<td>2</td><td>Certificate Validator -> Validator Mobile</td>
+		<td><b>"Check Immunity Certificate" screen, generate challenge</b><br> The certificate validator will generate a unique "qr code" challenge for the certificate owner to scan and validate its identity</td>
+		<td> <img src="screenshots/CheckImmunityCertficate-Step1-GenerateChallenge.png"  width="160" height="320" alt="Check Immunity Certificate, selection 'Generate Challenge'"/></td>
+	</tr>
+</table>
+	
+	
 ## Certification Validation Process
 
 
