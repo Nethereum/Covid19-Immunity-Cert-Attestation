@@ -159,7 +159,7 @@ The data included in the certificate as per the current example is: <br>
 Many thanks to:
 
 + David Blanco (Providing medical information and material)
-+ Aaron Kindell (Feedback, review and brainstorming thoughts)
++ Aaron Kindell, Kevin Small, Sasha Tanase (Feedback, review and brainstorming thoughts)
 + You for reading til here
 + ...
 
