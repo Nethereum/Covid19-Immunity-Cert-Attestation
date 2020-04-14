@@ -5,7 +5,7 @@ This is a PoC of a way to enable a person and / or institution to verify another
 Current progress: Mobile application(s) validation process flow completed, currently working on finishing smart contracts
 
 
-Please feel free to ping me (Juan @juanfranblanco twitter) for a chat if you want to help and make some pull:)
+Please feel free to ping me (Juan @juanfranblanco twitter) for a chat if you want to help and make some pull:). Please make a pull if you find any grammar mistakes, everything is WIP.
 
 ## Why?
 
@@ -16,6 +16,11 @@ Those people at risk who could be our loved ones, require that any people that c
 As we have seen many people have died in hospital and residences, the problem exacerbates in this type of places due to the amount of people at risk. Here the people at charge need to make sure that nobody enters the building which could carry the virus, many people might be anxious to see their loved ones there, without realising the risk associated with it as well, hence the requirement to put this type immunity validation.
 
 Obviously there are many other scenarios like returning to work, resuming live events and big crowd gatherings ...
+
+## What is an immunity certificate
+An immunity certificate provides a confirmation that a person has tested positive (only) for the lgG antibodies. Please see diagram of the different types of test results used in the hospital La Paz (Madrid). (To be translated from Spanish)
+
+![Test results diagram'](/docResources/TestResults-Meaning-Spanish.jpg "Testing results diagram")
 
 ## Constraints
 
@@ -43,7 +48,8 @@ The process of validating a certificate is the following.
 2. The QR challenge will be scan and signed by the owner of the certificate and respond as another QR code containing both the certificate and the signature of the challenge.
 3. The Certificate validator will scan now the QR response and start the validation process.
 4. First will validate the certificate, by checking if the signature of the certificate matches the data included in the certificate. 
-The data included in the certificate as per the current example is:
+
+**Data included in the certificate (as of now)**
 
 * Test centre id (The test centre where the certificate originates)
 * Test centre signer (Who has validated the test results and has created the certificate in the test centre)
@@ -144,12 +150,20 @@ The data included in the certificate as per the current example is: <br>
 + Invalidate certificate
 + Semi connected scenarios, can we sync with Ethereum data to enable to validate locally..
 
-## Credits for resources used
+# Credits
+Many thanks to:
 
-Chased Home UI Design  https://github.com/ufukhawk/Chased-Home-UI-Design for the original template
-found at https://github.com/jsuarezruiz/xamarin-forms-goodlooking-UI
++ David Blanco (Providing medical information and material)
++ Aaron Kindell (Feedback, review and brainstorming thoughts)
++ ...
 
-Images / Icons used
+## Resources Credits
+Many thanks to the people creating this invaluable resources:
+
+Chased Home UI Design  https://github.com/ufukhawk/Chased-Home-UI-Design the Xamarin template used for the application
+J Suarez Ruis https://github.com/jsuarezruiz/xamarin-forms-goodlooking-UI for creating the Xamarin Forms GoodLooking UI (Template found there)
+
+### Images / Icons used
 CoronaVirus 
 Dianakuehn30010 at https://pixabay.com/illustrations/virus-isolated-corona-coronavirus-4930122/
 
