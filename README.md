@@ -22,6 +22,8 @@ An immunity certificate provides a confirmation that a person has tested positiv
 
 ![Test results diagram'](/docResources/TestResults-Meaning-Spanish.jpg "Testing results diagram")
 
+The scope of the current project is to provide only attestation of an immunity certificate, not to carry all the different variants of test results. These should be part of the testing centre.
+
 ## Constraints
 
 Certificates need to be borderless (not specific to a country), maintain user privacy, cheap to create using existing technology, should work in semi disconnected scenarios, and not require some government id as these are not required in some countries or children may not have one, limit the information to avoid discrimination (could be used for positive discrimination or negative in case of an invalid test). 
