@@ -160,6 +160,7 @@ Many thanks to:
 
 + David Blanco (Providing medical information and material)
 + Aaron Kindell (Feedback, review and brainstorming thoughts)
++ You for reading til here
 + ...
 
 ## Resources Credits
