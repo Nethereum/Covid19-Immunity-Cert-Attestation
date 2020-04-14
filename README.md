@@ -7,7 +7,7 @@ Current progress: Mobile application(s) validation process flow completed, curre
 
 Please feel free to either:
 * Pick of any of the current issues marked as help wanted, participate on the ones marked for discussion (mainly anyone really) or create an issue for any new feature.
-* Ping me (Juan @juanfranblanco twitter) for a chat if you want to help. 
+* Send a message on the Nethereum gitter channel https://gitter.im/Nethereum/Nethereum# or Juan Blanco in @juanfranblanco twitter for a chat if you want to help. 
 * Please make a pull if you find any grammar mistakes, in this readme (current documentation) everything is WIP.
 
 ## Why?
@@ -37,7 +37,7 @@ The example includes an Android and iOS mobile application which can be used bot
 
 Ethereum smart contract (public) to store valid Test Centres, Test Centre certificate issuers (who creates and sign the certificates), Expired / Invalidated Certificates, Test Centres or Issuers (which may invalidate previous certificates). 
 
-The data stored in smart contracts is limited to test centres and certficate as opposed to individual certificates to simplify scalability (7 billions versus and approx of 700,000 test centres handling 10,000 people each).
+The data stored in smart contracts is limited to test centres and expired certficates as opposed to individual certificates to simplify scalability (7 billions versus and approx of 700,000 test centres handling 10,000 people each).
 
 Ethereum accounts to integrate with Ethereum but also enable secp256k1 to sign and validate certificates.
 
