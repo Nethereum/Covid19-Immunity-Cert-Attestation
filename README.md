@@ -5,7 +5,10 @@ This is a PoC of a way to enable a person and / or institution to verify another
 Current progress: Mobile application(s) validation process flow completed, currently working on finishing smart contracts
 
 
-Please feel free to ping me (Juan @juanfranblanco twitter) for a chat if you want to help and make some pull:). Please make a pull if you find any grammar mistakes, everything is WIP.
+Please feel free to either:
+* Pick of any of the current issues marked as help wanted, participate on the ones marked for discussion (mainly anyone really) or create an issue for any new feature.
+* Ping me (Juan @juanfranblanco twitter) for a chat if you want to help. 
+* Please make a pull if you find any grammar mistakes, in this readme (current documentation) everything is WIP.
 
 ## Why?
 
