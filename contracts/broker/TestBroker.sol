@@ -1,6 +1,6 @@
 pragma solidity 0.6.6;
 
-contract TestCenterBroker {
+contract TestBroker {
     uint256 private constant COORDINATE_RESOLUTION = 1000000000000000;
 
     struct Coordinates {
@@ -8,19 +8,23 @@ contract TestCenterBroker {
         uint256 long;
     }
 
-    struct TestCenter {
-        bytes32     centerName;
+    struct SampleCentre {
+        bytes32     centreName;
         bool        isActive;
         uint        availabileTestSlots;
         uint        capacityTestSlots;
         Coordinates location;
+
+        // Map of testing centers affilated with sample centeer and their average cost per test
+        mapping(bytes32 => uint8) testingCentreAffiliates;
     }
 
     struct City {
-        bytes32      cityName;
-        Coordinates  cityCenterLocation;
-        TestCenter[] allTestCenters;
-        mapping(bytes32 => TestCenter) testCenterMap;
+        bytes32        cityName;
+        Coordinates    cityCentreLocation;
+
+        SampleCentre[] allSampleCentres;
+        mapping(bytes32 => SampleCentre) sampleCentreMap;
     }
 
     struct County {
