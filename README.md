@@ -33,7 +33,7 @@ Certificates need to be borderless (not specific to a country), maintain user pr
 
 ## Technology
 
-The example includes an Android and iOS mobile application which can be used both by the certificate validator and the owner of the certificate, commununication between both devices is done exchanging QR codes.
+The example includes an Android and iOS mobile application which can be used both by the certificate validator and the owner of the certificate, communication between both devices is done exchanging QR codes.
 
 Ethereum smart contract (public) to store valid Test Centres, Test Centre certificate issuers (who create and sign the certificates), Expired / Invalidated Certificates, Test Centres or Issuers (which may invalidate previous certificates). 
 
