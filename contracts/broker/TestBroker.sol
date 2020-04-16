@@ -29,6 +29,7 @@ contract TestBroker {
 
     struct County {
         bytes32 countyName;
+        uint8   hotZoneLevel;
 
         bytes32[] cities;
         mapping(bytes32 => City) cityMap;
