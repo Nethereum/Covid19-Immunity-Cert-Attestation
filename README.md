@@ -44,7 +44,7 @@ Ethereum accounts to integrate with Ethereum but also enable secp256k1 to sign a
 IPFS to store users photos to enable physical validation of certificates
 
 ## What this won't do or is out of scope at the moment (pragmatism based on current circunstances)
-+ Demonstrating storage in test centres of certificates, results, etc.
++ Demonstrate storage in test centres of certificates, results, etc.
 + DIDs, decentralised identity usage as we just want to create a simple certificate that can be used by any technology (literally comma separated values). This could / will be upgraded in the future.
 
 ## Certification Validation Process
