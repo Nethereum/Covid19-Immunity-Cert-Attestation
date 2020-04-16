@@ -159,7 +159,8 @@ The data included in the certificate as per the current example is: <br>
 Many thanks to:
 
 + David Blanco (Providing medical information and material)
-+ Aaron Kendall, Kevin Small, Sasha Tanase (Feedback, review and brainstorming thoughts)
++ Sterghios Moschos (Providing medical information and material)
++ Aaron Kendall, Kevin Small, Sasha Tanase, Gael Blanchemain (Feedback, review and brainstorming thoughts)
 + You for reading til here
 + ...
 
@@ -167,7 +168,7 @@ Many thanks to:
 Many thanks to the people creating this invaluable resources:
 
 Chased Home UI Design  https://github.com/ufukhawk/Chased-Home-UI-Design the Xamarin template used for the application
-J Suarez Ruis https://github.com/jsuarezruiz/xamarin-forms-goodlooking-UI for creating the Xamarin Forms GoodLooking UI (Template found there)
+J Suarez Ruiz https://github.com/jsuarezruiz/xamarin-forms-goodlooking-UI for creating the Xamarin Forms GoodLooking UI (Template found there)
 
 ### Images / Icons used
 CoronaVirus 
