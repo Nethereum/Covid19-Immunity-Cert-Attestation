@@ -16,7 +16,7 @@ As testing of immunity for corona virus becomes more widely available, it will a
 
 Those people at risk who could be our loved ones require that any people that comes close to them can validate themselves as immune. This could include any person coming to provide any volunteering help.
 
-As we have seen, many people have died in hospital and residences, the problem is more serious in this type of places due to the amount of people at risk. Here the people in charge need to make sure that contagious person enters the building, many people might be anxious to see their loved ones there, without realising the risk associated with it, hence the requirement to put this type of immunity validation.
+As we have seen, many people have died in hospital and residences, the problem is more serious in this type of places due to the amount of people at risk. Here the people in charge need to make sure that no contagious person enters the building, many people might be anxious to see their loved ones there, without realising the risk associated with it, hence the requirement to put this type of immunity validation.
 
 Obviously there are many other scenarios like returning to work, resuming live events and big crowd gatherings ...
 
@@ -29,7 +29,7 @@ The scope of the current project is to provide only attestation of an immunity c
 
 ## Constraints
 
-Certificates need to be borderless (not specific to a country), maintain user privacy, cheap to create existing technology, should work in semi disconnected scenarios, and not require some government id as these are not required in some countries and children may not have one, limit information storage to avoid discrimination (could be used for positive discrimination or negative in case of an invalid test). 
+Certificates need to be borderless (not specific to a country), maintain user privacy, cheap to create using existing technology, should work in semi disconnected scenarios, and not require some government id as these are not required in some countries and children may not have one, limit information storage to avoid discrimination (could be used for positive discrimination or negative in case of an invalid test). 
 
 ## Technology
 
