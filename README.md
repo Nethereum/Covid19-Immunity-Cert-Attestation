@@ -35,7 +35,7 @@ Certificates need to be borderless (not specific to a country), maintain user pr
 
 The example includes an Android and iOS mobile application which can be used both by the certificate validator and the owner of the certificate, communication between both devices is done exchanging QR codes.
 
-Ethereum smart contract (public) to store valid Test Centres, Test Centre certificate issuers (who create and sign the certificates), Expired / Invalidated Certificates, Test Centres or Issuers (which may invalidate previous certificates). 
+Ethereum smart contract (public) to store valid Test Centres, Test Centre certificate issuers (who creates and sign the certificates), Expired / Invalidated Certificates, Test Centres or Issuers (which may invalidate previous certificates). 
 
 The data stored in smart contracts is limited to test centres and expired certficates as opposed to individual certificates to simplify scalability (7 billions versus and approx of 700,000 test centres handling 10,000 people each).
 
