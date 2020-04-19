@@ -10,11 +10,13 @@ contract TestBroker {
     }
 
     struct SampleCentre {
+        uint        centreId;
         address     centreAcct;
         bytes32     centreName;
         bool        isActive;
-        uint        availabileTestSlots;
-        uint        capacityTestSlots;
+        uint16      avgTimeForResultsInDays;
+        uint64      availabileTestSlots;
+        uint64      capacityTestSlots;
         uint8       hotZoneLevel;
         Coordinates location;
         bool        isValue;
@@ -66,7 +68,7 @@ contract TestBroker {
     mapping(bytes32 => SampleCentre) sampleCentreMap;
 
     // Map of testing centres affilated with sample centre and their average cost per test
-    mapping(bytes32 => mapping(bytes32 => uint8)) testingCentreAffiliates;
+    mapping(bytes32 => mapping(bytes32 => bytes32)) testingCentreAffiliates;
 
     address admin;
 
@@ -102,7 +104,7 @@ contract TestBroker {
 
     /// @dev This method will add a new SampleCentre to location cache (ideally using the coordinates)
     /// @author Aaron Kendall
-    function addSampleCentreToLocationCache(SampleCentre memory newCentre) public onlyAdmin {
+    function addSampleCentreToLocationCache(SampleCentre memory newCentre) public view onlyAdmin {
 
         require(sampleCentreMap[newCentre.centreName].isValue != true, "The sample centre already exists.");
 
@@ -111,11 +113,11 @@ contract TestBroker {
 
     /// @dev This method will link a testing centre as an affiliate to a sample centre
     /// @author Aaron Kendall
-    function addTestingAffiliation(bytes32 sampleCentreId, bytes32 testCentreId, uint8 initialCost) public onlyAdmin {
+    function addTestingAffiliation(bytes32 sampleCentreId, bytes32 testCentreId, bytes32 insuranceGrp) public onlyAdmin {
 
         require(sampleCentreMap[sampleCentreId].isValue == true, "The sample centre does not exist.");
 
-        (testingCentreAffiliates[sampleCentreId])[testCentreId] = initialCost;
+        (testingCentreAffiliates[sampleCentreId])[testCentreId] = insuranceGrp;
     }
 
     /// @dev This method will retrieve a SampleCentre based on the ID
@@ -129,24 +131,56 @@ contract TestBroker {
 
     /// @dev This method will retrieve a list of sample centres with available testing
     /// @author Aaron Kendall
-    function getSampleCentreWithAvailableTests() public view returns (SampleCentre[] memory)  {
+    function getSampleCentresWithAvailableTests(uint16 minWaitTimeInDays) public view returns (SampleCentre[] memory)  {
 
-        // TODO
-        SampleCentre[] memory centresWithAvailability;
+        uint nAvailableTests = 0;
 
-        for (uint idx = 0; idx < allSampleCentres.length; idx++) {
-            SampleCentre storage tempCentre = sampleCentreMap[allSampleCentres[idx]];
+        for (uint8 idx = 0; idx < allSampleCentres.length; idx++) {
 
-            if (tempCentre.availabileTestSlots > 0) {
-                /*
-                centresWithAvailability.push(SampleCentre { sampleCentreId: tempCentre.sampleCentreId, 
-                                                            availabileTestSlots: tempCentre.availabileTestSlots,
-                                                            location: tempCentre.location });
-                */
+            if ((sampleCentreMap[allSampleCentres[idx]].availabileTestSlots > 0) &&
+                (sampleCentreMap[allSampleCentres[idx]].isActive) &&
+                (sampleCentreMap[allSampleCentres[idx]].avgTimeForResultsInDays > minWaitTimeInDays)) {
+                nAvailableTests++;
+            }
+        }
+
+        SampleCentre[] memory centresWithAvailability = new SampleCentre[](nAvailableTests);
+
+        for (uint8 idx = 0; idx < allSampleCentres.length; idx++) {
+
+            if ((sampleCentreMap[allSampleCentres[idx]].availabileTestSlots > 0) &&
+                (sampleCentreMap[allSampleCentres[idx]].isActive)) {
+
+                centresWithAvailability[idx] = SampleCentre ({
+                    centreId: sampleCentreMap[allSampleCentres[idx]].centreId,
+                    centreName: sampleCentreMap[allSampleCentres[idx]].centreName,
+                    centreAcct: sampleCentreMap[allSampleCentres[idx]].centreAcct,
+                    isActive: sampleCentreMap[allSampleCentres[idx]].isActive,
+                    avgTimeForResultsInDays: sampleCentreMap[allSampleCentres[idx]].avgTimeForResultsInDays,
+                    availabileTestSlots: sampleCentreMap[allSampleCentres[idx]].availabileTestSlots,
+                    capacityTestSlots: sampleCentreMap[allSampleCentres[idx]].capacityTestSlots,
+                    hotZoneLevel: sampleCentreMap[allSampleCentres[idx]].hotZoneLevel,
+                    location: sampleCentreMap[allSampleCentres[idx]].location,
+                    isValue: sampleCentreMap[allSampleCentres[idx]].isValue
+                });
             }
         }
 
         return centresWithAvailability;
     }
 
+    /// @dev This method will update the sample centre information
+    /// @author Aaron Kendall
+    function updateSampleCentre(SampleCentre memory updateCentre) public onlyAdmin {
+
+        require(sampleCentreMap[updateCentre.centreName].isValue == true, "The sample centre does not exist.");
+
+        sampleCentreMap[updateCentre.centreName].centreAcct = updateCentre.centreAcct;
+        sampleCentreMap[updateCentre.centreName].isActive = updateCentre.isActive;
+
+        sampleCentreMap[updateCentre.centreName].avgTimeForResultsInDays = updateCentre.avgTimeForResultsInDays;
+        sampleCentreMap[updateCentre.centreName].availabileTestSlots = updateCentre.availabileTestSlots;
+        sampleCentreMap[updateCentre.centreName].capacityTestSlots = updateCentre.capacityTestSlots;
+        sampleCentreMap[updateCentre.centreName].hotZoneLevel = updateCentre.hotZoneLevel;
+    }
 }
