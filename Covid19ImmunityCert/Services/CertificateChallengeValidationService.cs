@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Covid19ImmunityCert.Contracts.Covid19Certification.ContractDefinition;
 using Covid19ImmunityCert.Core;
 using Nethereum.Signer;
 using Nethereum.Util;
@@ -15,14 +16,14 @@ namespace Covid19ImmunityCert.Services
         /// Validates the certificate signer is including in the smart contract registry
         /// Validates the certificate is still valid (ie not in the expired certificates)
         /// </summary>
-        public async Task<SignedCertificate> ValidateCertificateAsync(string challenge, string response)
+        public async Task<SignedImmunityCertificate> ValidateCertificateAsync(string challenge, string response)
         {
             var responseValues = response.Split(ResponseSeparator);
             var fullCertificate = responseValues[0];
             var signature = responseValues[1];
-            var certificate = new SignedCertificate(fullCertificate);
-            if (!certificate.IsCertificateValid()) return null; // Invalid certificate
-            if (!ValidChallengeSignature(challenge, signature, certificate.UserAddress)) return null; //Signature does not match certificates signature
+            var certificate = new SignedImmunityCertificate(fullCertificate);
+            if (!certificate.IsCertificateSignatureValid()) return null; // Invalid certificate
+            if (!ValidChallengeSignature(challenge, signature, certificate.ImmunityCertificate.OwnerAddress)) return null; //Signature does not match certificates signature
             //Smart contract registry validation 
             return await Task.FromResult(certificate);
         }

@@ -10,6 +10,10 @@
 *.userosscache
 *.sln.docstates
 
+testchain/clique/devChain/geth
+testchain/devChain/geth
+testchain/parity poa/parity0/chains
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
