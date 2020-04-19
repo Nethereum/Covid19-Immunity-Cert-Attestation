@@ -61,6 +61,15 @@ contract TestBroker {
         bool isValue;
     }
 
+    struct SampleKit {
+        address signerAddress; // the sample centre signer
+        bytes32 testCentreId; // the unique id of the test centre
+        bytes32 testKitId; // unique identifier of the testKitId, could be linked to a supply chain unique product batch id
+        int64 issuedDate; // when the testKitId was issued
+        int64 sentDate; // when the testKitId was sent to the testing centre
+        int64 receivedBackDate; // when the testKitId was received back from the testing centre
+    }
+
     bytes32[] countries;
     mapping(bytes32 => Country) countryMap;
 
