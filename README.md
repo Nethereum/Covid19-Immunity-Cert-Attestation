@@ -1,22 +1,22 @@
 # Covid19 Immunity Certification and attestation PoC
 
-This is a PoC of a way to enable a person and / or institution to verify another person has a valid immunity certificate. Hopefully this can inspire or help anyone working on this, feel free to use anything here. Remember to credit correctly if you use any images / icons (see links at the bottom for attributions for those resources)
+This PoC enables a person and / or institution to verify if another person has a valid immunity certificate. Hopefully this can inspire or help anyone working on this, feel free to use anything here. Remember to give due credit if you use any image / icon (see links at the bottom for attributions for those resources).
 
-Current progress: Mobile application(s) validation process flow completed, currently working on finishing smart contracts
+Current progress: Mobile application(s) validation process flow completed, currently working on finishing smart contracts.
 
 
 Please feel free to either:
-* Pick of any of the current issues marked as help wanted, participate on the ones marked for discussion (mainly anyone really) or create an issue for any new feature.
+* Pick any of the current issues marked as "help wanted", participate on the ones marked for discussion (mainly anyone really) or create an issue for any new feature.
 * Send a message on the Nethereum gitter channel https://gitter.im/Nethereum/Nethereum# or Juan Blanco in @juanfranblanco twitter for a chat if you want to help. 
 * Please make a pull if you find any grammar mistakes, in this readme (current documentation) everything is WIP.
 
 ## Why?
 
-As testing of immunity for corona virus becomes more widely available, it will allow us to start helping people or visiting family members that are at risk, happily knowing that we won't put them at danger.
+As testing of immunity for corona virus becomes more widely available, it will allow us to start helping people or visiting family members that are at risk, happily knowing that we won't put them in danger.
 
-Those people at risk who could be our loved ones, require that any people that comes close to them can validate themselves as immune. This could include any person coming to provide any volunteering help.
+Those people at risk who could be our loved ones require that any people that comes close to them can validate themselves as immune. This could include any person coming to provide any volunteering help.
 
-As we have seen many people have died in hospital and residences, the problem exacerbates in this type of places due to the amount of people at risk. Here the people at charge need to make sure that nobody enters the building which could carry the virus, many people might be anxious to see their loved ones there, without realising the risk associated with it as well, hence the requirement to put this type immunity validation.
+As we have seen, many people have died in hospital and residences, the problem is more serious in this type of places due to the amount of people at risk. Here the people in charge need to make sure that no contagious person enters the building, many people might be anxious to see their loved ones there, without realising the risk associated with it, hence the requirement to put this type of immunity validation.
 
 Obviously there are many other scenarios like returning to work, resuming live events and big crowd gatherings ...
 
@@ -29,11 +29,11 @@ The scope of the current project is to provide only attestation of an immunity c
 
 ## Constraints
 
-Certificates need to be borderless (not specific to a country), maintain user privacy, cheap to create using existing technology, should work in semi disconnected scenarios, and not require some government id as these are not required in some countries or children may not have one, limit the information to avoid discrimination (could be used for positive discrimination or negative in case of an invalid test). 
+Certificates need to be borderless (not specific to a country), maintain user privacy, cheap to create using existing technology, should work in semi disconnected scenarios, and not require some government id as these are not required in some countries and children may not have one, limit information storage to avoid discrimination (could be used for positive discrimination or negative in case of an invalid test). 
 
 ## Technology
 
-The example includes an Android and iOS mobile application which can be used both by the certificate validator and the owner of the certificate, communinication between both devices is done exchanging qr codes.
+The example includes an Android and iOS mobile application which can be used both by the certificate validator and the owner of the certificate, communication between both devices is done exchanging QR codes.
 
 Ethereum smart contract (public) to store valid Test Centres, Test Centre certificate issuers (who creates and sign the certificates), Expired / Invalidated Certificates, Test Centres or Issuers (which may invalidate previous certificates). 
 
@@ -43,15 +43,15 @@ Ethereum accounts to integrate with Ethereum but also enable secp256k1 to sign a
 
 IPFS to store users photos to enable physical validation of certificates
 
-## What this won't do or it is out of scope at the moment (pragmatism based on current circunstances)
+## What this won't do or is out of scope at the moment (pragmatism based on current circunstances)
 + Demonstrate storage in test centres of certificates, results, etc.
 + DIDs, decentralised identity usage as we just want to create a simple certificate that can be used by any technology (literally comma separated values). This could / will be upgraded in the future.
 
 ## Certification Validation Process
 The process of validating a certificate is the following.
-1. The validator will generate a challenge (random text) for the owner of the certificate to sign with the private key and account which is part of the certificate, this will be display as a QR Code.
-2. The QR challenge will be scan and signed by the owner of the certificate and respond as another QR code containing both the certificate and the signature of the challenge.
-3. The Certificate validator will scan now the QR response and start the validation process.
+1. The validator will generate a challenge (random text) for the owner of the certificate to sign with the private key and account which is part of the certificate, this will be displayed as a QR Code.
+2. The QR challenge will be scanned and signed by the owner of the certificate and respond as another QR code containing both the certificate and the signature of the challenge.
+3. The Certificate validator will then scan the QR response and start the validation process.
 4. First will validate the certificate, by checking if the signature of the certificate matches the data included in the certificate. 
 
 **Data included in the certificate (as of now)**
@@ -62,16 +62,16 @@ The process of validating a certificate is the following.
 * User photo hash (IPFS hash to validate the user physically)
 * Signature (To validate the data has not been tampered and check the test centre signer)
 
-3. Validate the challenge signature, using the certificate and the signed challenge, we will be able to validate the user matchs the one in the certificate
+3. Validate the challenge signature, using the certificate and the signed challenge, we will be able to validate if the user matches the one in the certificate.
 
-4. We will connect to an Ethereum smart contract (assumed public) to validate the following.
-* Is the test centre id valid and has not been flagged as invalid test centre (for example bad batch of test kits, batch could be added to the certificate)
-* Is the signer valid and included in the approved signers
-* Is the certificate valid, and has not been forced to expiry (ie further checks has invalidated the immunity)
+4. We will connect to an Ethereum smart contract (assumed public) to validate the following:
+* Is the test centre id valid and has not been flagged as invalid test centre? (for example bad batch of test kits, batch could be added to the certificate)
+* Is the signer valid and included in the approved signers?
+* Is the certificate valid, and has not been forced to expiry? (ie further checks has invalidated the immunity)
 
 
 ### Physical validation
-An IPFS hash of a photo of the user is included in the certificate, so the person validated the certification can check the certificate belongs to the person without requiring any other form of identification or id attached to the certificate as these might not be available in some countries. This could prevent also lending a device / certificate to another person. 
+An IPFS hash of a photo of the user is included in the certificate, so the person validated the certification can check that  the certificate belongs to the person without requiring any other form of identification or id attached to the certificate as these might not be available in some countries. This could prevent also lending a device / certificate to another person. 
 
 #### Storage 
 Assuming that we store 500kb photos in IPFS, we would need 1TB for around 2 million photos.
@@ -88,7 +88,7 @@ Assuming that we store 500kb photos in IPFS, we would need 1TB for around 2 mill
 	</tr>
 	<tr>
 		<td>2</td><td>Certificate Validator -> Validator Mobile</td>
-		<td><b>"Check Immunity Certificate" screen, generate challenge</b><br> The certificate validator will generate a unique "qr code" challenge and wait for the certificate owner to scan it to validate its identity. This unique challenge (some random text) will be signed by the validator using its private key which if matched to the cert owners id (ethereum address) to validate authenticity. There might be scenarios that some unique challenge could be shared across different people to speed up the process, for example a long queue.</td>
+		<td><b>"Check Immunity Certificate" screen, generate challenge</b><br> The certificate validator will generate a unique "qr code" challenge and wait for the certificate owner to scan it to validate its identity. This unique challenge (some random text) will be signed by the validator using its private key which if matched to the cert owners id (ethereum address) to validate authenticity. There might be scenarios where some unique challenge could be shared across different people to speed up the process, for example a long queue.</td>
 		<td> <img src="screenshots/CheckImmunityCertficate-Step1-GenerateChallenge.png"  width="160" height="320" alt="Check Immunity Certificate, selection 'Generate Challenge'"/>
 		<img src="screenshots/CheckImmunityCertficate-Step2-ChallengeGenerated-WaitToScanResponse.png"  width="160" height="320" alt="Check Immunity Certificate, selection 'Generated Challenge wait for scan response'"/>
 		</td>
@@ -159,7 +159,8 @@ The data included in the certificate as per the current example is: <br>
 Many thanks to:
 
 + David Blanco (Providing medical information and material)
-+ Aaron Kindell, Kevin Small, Sasha Tanase (Feedback, review and brainstorming thoughts)
++ Sterghios Moschos (Providing medical information and material)
++ Aaron Kendall, Kevin Small, Sasha Tanase, Gael Blanchemain (Feedback, review and brainstorming thoughts)
 + You for reading til here
 + ...
 
@@ -167,7 +168,7 @@ Many thanks to:
 Many thanks to the people creating this invaluable resources:
 
 Chased Home UI Design  https://github.com/ufukhawk/Chased-Home-UI-Design the Xamarin template used for the application
-J Suarez Ruis https://github.com/jsuarezruiz/xamarin-forms-goodlooking-UI for creating the Xamarin Forms GoodLooking UI (Template found there)
+J Suarez Ruiz https://github.com/jsuarezruiz/xamarin-forms-goodlooking-UI for creating the Xamarin Forms GoodLooking UI (Template found there)
 
 ### Images / Icons used
 CoronaVirus 

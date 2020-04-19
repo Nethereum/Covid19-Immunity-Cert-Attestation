@@ -11,7 +11,7 @@ namespace Covid19ImmunityCert.Services
         public Task<string> GetFullCertificateAsync()
         {
             //testing workaround
-            return Task.FromResult("0x12890d2cce102216644c59daE5baed380d84830c,0x12890D2cce102216644c59daE5baed380d84830c,100,QmbtqAxAnEqumx9k8wx8yxyANpC5vVwvQsdSWUQof9NP2o,0x7f9e4e804df31ae93bd60ca0f400fc790195839c475f4cc121bf611da7c1fe84678afcd654466c9aba7f8523230e40b0e444e7365a2f6e59772d3ffeb46c5bb11c");
+            return Task.FromResult("0x12890d2cce102216644c59daE5baed380d84830c,0x12890d2cce102216644c59daE5baed380d84830c,100,QmbtqAxAnEqumx9k8wx8yxyANpC5vVwvQsdSWUQof9NP2o,10000,TestKit1,0x12890d2cce102216644c59daE5baed380d84830c,a557275c55368d1ce2a2c7a0009de2bc8945eada0a6590b1b61de83c10b1a6507e5abbf3291e4527c180d3917f96f4b2fed3b26f69918130eba1dc25c79d69361b");
             //return SecureStorage.GetAsync(certificateStorageKey);
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using Covid19ImmunityCert.Contracts.Base58Encoding;
 using Covid19ImmunityCert.Services;
 using Xamarin.Forms;
 using ZXing;
@@ -57,9 +58,9 @@ namespace Covid19ImmunityCert
                     ValidationSuccesArea.IsVisible = true;
                     //We need some settings for gateways or gateways for test centre
                     //https://ipfs.github.io/public-gateway-checker/
-                    if (certificate.PhotoId != null)
+                    if (certificate.ImmunityCertificate.PhotoId != null && certificate.ImmunityCertificate.PhotoId.Length > 0)
                     {
-                        PhotoUser.Source = "https://ipfs.io/ipfs/" + certificate.PhotoId;
+                        PhotoUser.Source = "https://ipfs.io/ipfs/" + certificate.ImmunityCertificate.PhotoId.EncodeBase58();
                     }
                 }
                 else // TODO display and throw exceptions with errors whilst validating and restart validation()

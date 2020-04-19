@@ -20,4 +20,7 @@
   <ItemGroup>
     <Folder Include="Renderers\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Covid19ImmunityCert.Contracts\Covid19ImmunityCert.Contracts.csproj" />
+  </ItemGroup>
 </Project>
