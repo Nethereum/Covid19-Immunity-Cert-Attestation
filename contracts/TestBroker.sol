@@ -10,8 +10,8 @@ contract TestBroker {
     }
 
     struct SampleCentre {
-        uint        centreId;
-        address     centreAcct;
+        bytes32     centreId;
+        address     signerAddress;
         bytes32     centreName;
         bool        isActive;
         uint16      avgTimeForResultsInDays;
@@ -154,7 +154,7 @@ contract TestBroker {
                 centresWithAvailability[idx] = SampleCentre ({
                     centreId: sampleCentreMap[allSampleCentres[idx]].centreId,
                     centreName: sampleCentreMap[allSampleCentres[idx]].centreName,
-                    centreAcct: sampleCentreMap[allSampleCentres[idx]].centreAcct,
+                    signerAddress: sampleCentreMap[allSampleCentres[idx]].signerAddress,
                     isActive: sampleCentreMap[allSampleCentres[idx]].isActive,
                     avgTimeForResultsInDays: sampleCentreMap[allSampleCentres[idx]].avgTimeForResultsInDays,
                     availabileTestSlots: sampleCentreMap[allSampleCentres[idx]].availabileTestSlots,
@@ -175,7 +175,7 @@ contract TestBroker {
 
         require(sampleCentreMap[updateCentre.centreName].isValue == true, "The sample centre does not exist.");
 
-        sampleCentreMap[updateCentre.centreName].centreAcct = updateCentre.centreAcct;
+        sampleCentreMap[updateCentre.centreName].signerAddress = updateCentre.signerAddress;
         sampleCentreMap[updateCentre.centreName].isActive = updateCentre.isActive;
 
         sampleCentreMap[updateCentre.centreName].avgTimeForResultsInDays = updateCentre.avgTimeForResultsInDays;
