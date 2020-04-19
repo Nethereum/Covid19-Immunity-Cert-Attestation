@@ -7,4 +7,8 @@
   <ItemGroup>
     <PackageReference Include="Nethereum.Web3" Version="3.7.1" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Contracts\" />
+    <Folder Include="TestBroker\" />
+  </ItemGroup>
 </Project>
