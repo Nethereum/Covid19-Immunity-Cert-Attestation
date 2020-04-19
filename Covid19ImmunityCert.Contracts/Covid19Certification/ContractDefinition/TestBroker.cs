@@ -9,7 +9,7 @@ using Nethereum.Contracts.CQS;
 using Nethereum.Contracts;
 using System.Threading;
 
-namespace Covid19ImmunityCert.Application.Contracts
+namespace Covid19ImmunityCert.Contracts.Covid19Certification.ContractDefinition
 {
     public partial class TestBrokerDeployment : TestBrokerDeploymentBase
     {

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 using Nethereum.Web3;
 
-namespace Covid19ImmunityCert.Application.TestBroker
+namespace Covid19ImmunityCert.Contracts.Covid19Certification
 {
     public class TestBrokerConsole
     {
