@@ -1,6 +1,8 @@
 using System;
 using System.Device.Location;
 using System.Linq;
+using System.Numerics;
+using System.Threading.Tasks;
 
 using Nethereum.RPC.Eth.DTOs;
 
@@ -12,24 +14,52 @@ namespace Covid19ImmunityCert.Contracts.Covid19Certification
 	{
 		public const double COORDINATE_RESOLUTION = 1000000000000000.0;
 
-		public SampleCentre ClosestSampleCentreWithAvailableTests(GetSampleCentresWithAvailableTestsFunction sampleCentresFunction, GeoCoordinate currLocation, BlockParameter blockParameter = null)
+		public async Task<SampleCentre> GetClosestSampleCentreWithAvailableTests(GetSampleCentresWithAvailableTestsFunction sampleCentresFunction, GeoCoordinate currLocation, BlockParameter blockParameter = null)
 		{
 			GetSampleCentresWithAvailableTestsOutputDTO availableTestsOutput =
-				SampleCentresWithAvailableTestsQueryAsync(sampleCentresFunction, blockParameter).Result;
+				await SampleCentresWithAvailableTestsQueryAsync(sampleCentresFunction, blockParameter).ConfigureAwait(false);
 
 			var availableTestCentres = availableTestsOutput.ReturnValue1;
 
-			var nearest
-				= availableTestCentres.Select(x => new GeoCoordinate((double) x.Location.Lat / COORDINATE_RESOLUTION, (double) x.Location.Long / COORDINATE_RESOLUTION))
-					   .OrderBy(x => x.GetDistanceTo(currLocation))
-					   .First();
+			var nearestLoc
+				= availableTestCentres.Select(x => new GeoCoordinate(ToDbl(x.Location.Lat), ToDbl(x.Location.Long)))
+					                  .OrderBy(x => x.GetDistanceTo(currLocation))
+					                  .First();
+
+			var nearestCentre =
+				availableTestCentres.Where(x => (ToDbl(x.Location.Lat) == nearestLoc.Latitude) && (ToDbl(x.Location.Long) == nearestLoc.Longitude))
+				                    .First();			
+
+			return nearestCentre;
+		}
+
+		public async Task<SampleCentre> GetClosestSampleCentreWithAvailableTests(GetSampleCentresWithAvailableTestsFunction sampleCentresFunction,
+			                                                                                                  GeoCoordinate currLocation,
+																											           uint acceptedHotZoneLevel,
+																											 BlockParameter blockParameter = null)
+		{
+			GetSampleCentresWithAvailableTestsOutputDTO availableTestsOutput =
+				await SampleCentresWithAvailableTestsQueryAsync(sampleCentresFunction, blockParameter).ConfigureAwait(false);
+
+			var availableTestCentres = availableTestsOutput.ReturnValue1;
+
+			var nearestLoc
+				= availableTestCentres.Where(x => x.HotZoneLevel <= acceptedHotZoneLevel)
+									  .Select(x => new GeoCoordinate(ToDbl(x.Location.Lat), ToDbl(x.Location.Long)))
+									  .OrderBy(x => x.GetDistanceTo(currLocation))
+					                  .First();
 
 			var nearestCentre =
 				availableTestCentres
-				.Where(x => (((double)x.Location.Lat / COORDINATE_RESOLUTION) == nearest.Latitude) && (((double)x.Location.Long / COORDINATE_RESOLUTION) == nearest.Longitude))
-				.First();			
+				.Where(x => (ToDbl(x.Location.Lat) == nearestLoc.Latitude) && (ToDbl(x.Location.Long) == nearestLoc.Longitude))
+				.First();
 
 			return nearestCentre;
+		}
+
+		public static double ToDbl(BigInteger coordinateValue)
+		{
+			return ((double)coordinateValue) / COORDINATE_RESOLUTION;
 		}
 	}
 }
