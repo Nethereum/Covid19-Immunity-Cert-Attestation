@@ -197,123 +197,228 @@ Blood Test Icon
 https://www.svgrepo.com/svg/96961/blood-test
 
 
-## Certificate creation 
+## Certificate verification smart contract 
 
-This is an example of how the certificates are created, you can copy this and run it in the Nethereum playground http://playground.nethereum.com
+This is the current solidity smart contract WIP for certificate validation
 
-```csharp
-using System;
-using System.Text;
-using Nethereum.Hex.HexConvertors.Extensions;
-using System.Threading.Tasks;
-using Nethereum.Web3;
-using Nethereum.Signer;
-using Nethereum.Util;
+```solidity
+pragma solidity ^0.6.5;
+pragma experimental ABIEncoderV2;
 
-public class Program
-{
 
-    static async Task Main(string[] args)
-    {
-				//The test centre Id could be an ipfs hash that includes all the information (maybe a did including endpoints to ethereum and ipfs gateways)
-				var testCentreId = "100";
-				var testCentreSupervisorPrivateKey = "0xb5b1870957d373ef0eeffecc6e4812c0fd08f554b37b233526acc331bf1544f7"; 
-				//cheating use the same
-				var userAddress = "0x12890d2cce102216644c59daE5baed380d84830c";
-				// The users photo ipfs hash 
-				// An ugly man smiling here:
-				// https://gateway.pinata.cloud/ipfs/QmbtqAxAnEqumx9k8wx8yxyANpC5vVwvQsdSWUQof9NP2o
-				var photoId = "QmbtqAxAnEqumx9k8wx8yxyANpC5vVwvQsdSWUQof9NP2o";
-				Console.WriteLine("Full certificate generated:");
-				Console.WriteLine(CertificateService.CreateCertificate(userAddress, testCentreId, testCentreSupervisorPrivateKey, photoId).FullCertificate);
+contract Covid19Certification {
+    
+    struct TestCentreCertSigner {
+        // the address of the signer issuer
+        address signerAddress;
+        // the test centre Id it belongs to
+        bytes32 testCentreId;
+        //any certificate issued by this issuer is invalid, needs to be rechecked
+        bool invalid;
+        //all certificates issued previously to this date are valid
+        //int64 for dates, apologies person from the year 292,277,026,596.
+        int64 expiryDate;
     }
 
-		public class CertificateService
-    {
-        public static SignedCertificate CreateCertificate(string userAddress, string testCentreId, string privateKey, string photoUserId)
-        {
-            var ethEcKey = new Nethereum.Signer.EthECKey(privateKey);
-            var signer = new Nethereum.Signer.EthereumMessageSigner();
-            var signerAddress = ethEcKey.GetPublicAddress();
-            var signature = signer.EncodeUTF8AndSign(SignedCertificate.GetRawCertificate(userAddress, signerAddress, testCentreId, photoUserId), ethEcKey);
-            return new SignedCertificate(userAddress, signerAddress, testCentreId, photoUserId, signature); 
-        }
+    struct TestCentre {
+        bytes32 testCentreId;
+        int64 expiryDate;
+        //any certificate issued under this testcentre is invalid, needs to be rechecked
+        bool invalid;
+    }
+
+    struct SignedImmunityCertificate {
+        ImmunityCertificate immunityCertificate;
+        bytes signature;
+    }
+
+    struct ImmunityCertificate {
+        address ownerAddress; // the owner of the certificate
+        address signerAddress; // the testcentre signer of the certificate (responsible to validate the testing results and issue the certificate)
+        bytes32 testCentreId; // the unique id of the test centre
+        bytes photoId; // ipfs hash of the photo id of the owner of the certificate for physical identification
+        // other thoughts to link biometrics to certificate keys to prevent swapping devices will be much better
+        // so we cannot leak any images
+        int64 expiryDate; // when the certficate will expire
+        int64 issuedDate; // when the certificate was issued
+        bytes32 testKitId; // unique identifier of the testKitId, could be linked to a supply chain unique product batch id
+        ///uint256 certificateId; // Undecided? will this be just backoffice and linked to owner to make it more private, unique identifier of the certificate Id, could be linked to a token like baseline
+        address[] guardians; // the delegated responsible persons for the owner of the certificate (i.e children)
     }
 
 
-		public class SignedCertificate
+    function fullVerificationCertificateChallengeWithSignature(SignedImmunityCertificate memory certificate,
+        string memory challenge,
+        bytes memory challengeSignature,
+        int64 date) public view returns (bool valid) {
+            require(verifyCertificateSignature(certificate), "Invalid certificate signature");
+            require(verifyCertificateChallengeSignature(certificate, challenge, challengeSignature), "Invalid certificate challenge, not the owner or guardian");
+            require(verifyCertificateTestCentreSigner(certificate.immunityCertificate), "Invalid signer, certificate signer no longer valid");
+            require(verifyCertificateExpiryDate(certificate.immunityCertificate, date), "Invalid certificate, certificate has expired");
+            require(verifyInvalidatedCertificate(certificate.immunityCertificate.ownerAddress), "Invalid certificate, certificate has expired");
+            require(verifyCertificateTestCentre(certificate.immunityCertificate), "Invalid test centre, test centre is not valid any more");
+            require(verifyTestKit(certificate.immunityCertificate.testKitId), "Invalid test kit id, test kit is no longer valid");
+            return true;
+    }
+    //TODO: Make all this upgradable
+    //TODO: Who can invalidate a certificate, testkit, testcentre, testsigner
+    //TODO: Multisignature process for invalidation / expiration change
+    //something to integrate with Gnosis multisig permissions (check with Stefan) https://github.com/gnosis/MultiSigWallet/blob/master/contracts/MultiSigWallet.sol
+    // or similar
+
+    //collection of certificates that are now invalid index using the address
+    //one owner / address per certificate to preserve privacy 
+    //certficateid to link to backoffice
+    mapping(address => bool) public invalidCertificates;
+    //collection of testKits that are now invalid, supply chain id or batch id
+    mapping(bytes32 => bool) public invalidTestKits;
+    mapping(bytes32 => TestCentre) public testCentres;
+    mapping(address => TestCentreCertSigner) public testCentreCertSigners;
+    //addresses that can administrate a testcentre 
+    mapping(bytes32 => mapping(address => bool)) public testCentreOwners;
+    
+    //administrators todo add something more realistic
+    //for now they can add test centres, invalidate testkits and other stuff
+    
+    mapping(address => bool) public administrators;
+
+    constructor() public {
+        administrators[msg.sender] = true;
+    }
+
+    function upsertTestCentreOwner(bytes32 testCentreId, address testCentreOwner, bool isOwner) public {
+        // multisig 
+        require(administrators[msg.sender] == true || testCentreOwners[testCentreId][msg.sender] == true, "Not enough permissions");
+        testCentreOwners[testCentreId][testCentreOwner] = isOwner;
+    }
+
+    function upsertTestCentre(TestCentre memory testCentre) public {
+        require(administrators[msg.sender] == true, "Not enough permissions");
+        testCentres[testCentre.testCentreId] = testCentre;
+    }
+    
+    function upsertTestCentreCertSigners(TestCentreCertSigner[] memory testCentreCertSignersToUpsert) public {
+        for (uint8 i = 0; i < testCentreCertSignersToUpsert.length; i++) {
+           upsertTestCentreCertSigner(testCentreCertSignersToUpsert[i]);
+        }
+    }
+
+    function upsertTestCentreCertSigner(TestCentreCertSigner memory testCentreCertSigner) public {
+         require(testCentreOwners[testCentreCertSigner.testCentreId][msg.sender] == true, 
+                "msg.sender has not got the permissions to upsert the testCentreCertSigner");
+         testCentreCertSigners[testCentreCertSigner.signerAddress] = testCentreCertSigner;
+    }
+
+
+    //we cannot check the current time as this won't be used in a transaction
+    function verifyCertificateExpiryDate(
+        ImmunityCertificate memory immunityCertificate,
+        int64 currentDate
+    ) public pure returns (bool result) {
+        return immunityCertificate.expiryDate > currentDate || immunityCertificate.expiryDate == 0;
+    }
+
+    function verifyTestKit(bytes32 testKitId) public view returns (bool valid) {
+        return invalidTestKits[testKitId] != true;
+    }
+
+    function verifyInvalidatedCertificate(address ownerAddress) public view returns (bool valid) {
+        return invalidCertificates[ownerAddress] != true;
+    }
+
+    function verifyCertificateTestCentreSigner(ImmunityCertificate memory immunityCertificate) public view returns (bool valid) {
+        TestCentreCertSigner storage testCentreCertSigner = testCentreCertSigners[immunityCertificate.signerAddress];
+        return (testCentreCertSigner.expiryDate > immunityCertificate.issuedDate || testCentreCertSigner.expiryDate == 0) && testCentreCertSigner.invalid == false; 
+    }
+
+    function verifyCertificateTestCentre(ImmunityCertificate memory immunityCertificate
+    ) public view returns (bool valid) {
+        TestCentre storage testCentre = testCentres[immunityCertificate.testCentreId];
+        return (testCentre.expiryDate > immunityCertificate.issuedDate || testCentre.expiryDate == 0) && testCentre.invalid == false;
+    }
+
+    function verifyCertificateSignature(
+        SignedImmunityCertificate memory signedCertificate
+    ) public pure returns (bool valid) {
+        //note: abi.encodePacked it is used to convert the string to bytes without the length prefix;
+        bytes32 hashedCert = hashPrefixed(
+            abi.encodePacked(
+                keccak256(abi.encode(signedCertificate.immunityCertificate))
+            )
+        );
+        address signer = recoverSigner(hashedCert, signedCertificate.signature);
+        return signer == signedCertificate.immunityCertificate.signerAddress;
+    }
+    
+
+    function verifyCertificateChallengeSignature(
+        SignedImmunityCertificate memory certificate,
+        string memory challenge,
+        bytes memory challengeSignature
+    ) public pure returns (bool valid) {
+        //note: abi.encodePacked it is used to convert a string to bytes without the length prefix;
+        bytes32 hashChallenge = hashPrefixed(abi.encodePacked(challenge));
+        address signer = recoverSigner(hashChallenge, challengeSignature);
+        ImmunityCertificate memory immunityCertificate = certificate.immunityCertificate;
+        
+        if (signer == immunityCertificate.ownerAddress) return true;
+        // prettier-ignore
+        for (uint8 i = 0; i < immunityCertificate.guardians.length; i++) {
+            if (signer == immunityCertificate.guardians[i]) return true;
+        }
+        return false;
+    }
+
+    function recoverSigner(bytes32 message, bytes memory sig)
+        internal
+        pure
+        returns (address)
     {
-        public static string GetRawCertificate(string userAddres, string signerAddress, string testCentreId, string photoId)
-        {
-            return $"{userAddres},{signerAddress},{testCentreId},{photoId}";
-        }
-        /// <summary>
-        /// The full certificate containing the "UserAddress,SignerAddress,TestCentreAddress,Signature"
-        /// </summary>
-        public string FullCertificate { get; private set; }
+        (uint8 v, bytes32 r, bytes32 s) = splitSignature(sig);
+        return ecrecover(message, v, r, s);
+    }
 
-        /// <summary>
-        /// The certificate containing the value "UserAddress,SignerAddress,TestCentreAddress"
-        /// </summary>
-        public string RawCertificate { get => GetRawCertificate(UserAddress,SignerAddress,TestCentreId, PhotoId); }
-        /// <summary>
-        /// The User Address (Unique Identifier for the current signed certificate) 
-        /// </summary>
-        public string UserAddress { get; private set; }
-        /// <summary>
-        /// The Signer Address (Unique Identifier for the signer) (this would be ideally the Test Supervisor of the TestCentre)
-        /// </summary>
-        public string SignerAddress { get; private set; }
-        /// <summary>
-        /// The Test Centre Address or Unique Identifier (An address could be used for signing verification purpouses or ENS to resolve it)
-        /// </summary>
-        public string TestCentreId { get; private set; }
-        /// <summary>
-        /// Photo IPFS Hash of the User Photo
-        /// </summary>
-        public string PhotoId { get; private set; }
-        /// <summary>
-        /// The Test Centre Address or Unique Identifier (An address could be used for signing verification purpouses or ENS to resolve it)
-        /// </summary>
-        public string Signature { get; private set; }
+    function hashPrefixed(bytes memory message)
+        internal
+        pure
+        returns (bytes32)
+    {
+        string memory prefix = "\x19Ethereum Signed Message:\n";
+        // the length is part of the prefix message as a string so we need to convert it to a string and remove the prefix
+        // so it is packed
+        bytes memory length = abi.encodePacked(uintToString(message.length));
+        return keccak256(abi.encodePacked(prefix, length, message));
+    }
 
-        public SignedCertificate(string fullCertificate)
-        {
-            this.FullCertificate = fullCertificate;
-            InitialiseFromFullCertificate(fullCertificate);
+    function splitSignature(bytes memory sig)
+        internal
+        pure
+        returns (uint8 v, bytes32 r, bytes32 s)
+    {
+        require(sig.length == 65);
+        assembly {
+            // first 32 bytes, after the length prefix.
+            r := mload(add(sig, 32))
+            // second 32 bytes.
+            s := mload(add(sig, 64))
+            // final byte (first byte of the next 32 bytes).
+            v := byte(0, mload(add(sig, 96)))
         }
+        return (v, r, s);
+    }
 
-        public SignedCertificate(string userAddress, string signerAddress, string testCentreId, string photoId, string signature)
-        {
-            this.UserAddress = userAddress;
-            this.SignerAddress = signerAddress;
-            this.TestCentreId = testCentreId;
-            this.PhotoId = photoId;
-            this.Signature = signature;
-            GenerateFullCertificate();
+    function uintToString(uint256 _base) internal pure returns (string memory) {
+        bytes memory _tmp = new bytes(32);
+        uint256 i;
+        for (i = 0; _base > 0; i++) {
+            _tmp[i] = bytes1(uint8((_base % 10) + 48));
+            _base /= 10;
         }
-
-        private void GenerateFullCertificate()
-        {
-            FullCertificate = $"{UserAddress},{SignerAddress},{TestCentreId},{PhotoId},{Signature}";
+        bytes memory _real = new bytes(i--);
+        for (uint256 j = 0; j < _real.length; j++) {
+            _real[j] = _tmp[i--];
         }
-
-        private void InitialiseFromFullCertificate(string fullCertificate)
-        {
-            var values = fullCertificate.Split(',');
-            UserAddress = values[0];
-            SignerAddress = values[1];
-            TestCentreId = values[2];
-            PhotoId = values[3];
-            Signature = values[4];
-        }
-
-        public bool IsCertificateValid()
-        {
-            var signer = new EthereumMessageSigner();
-            var recoveredAddress = signer.EncodeUTF8AndEcRecover(RawCertificate, Signature);
-            return recoveredAddress.IsTheSameAddress(SignerAddress);
-        }
+        return string(_real);
     }
 }
                 
