@@ -61,6 +61,13 @@ The process of validating a certificate is the following.
 * User / certificate id (ethereum address to uniquely identify the certificate and to validate user)
 * User photo hash (IPFS hash to validate the user physically)
 * Signature (To validate the data has not been tampered and check the test centre signer)
+* Guardian(s), if the person has a disability or is a minor a list of people that can be used as user signers.
+* Testing kit id: Unique identifier of the testing kit, as we have seen some testing kits have proven to give invalid results. (A supply chain link )
+* Certificate expiry date. We don't know how long the antibodies will last, so continuous check to validate antibodies, studies like this indicates that they can last 3 years on previous coronavirus https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2851497/, although other papers indicate 1 year.
+* Certficate creation date. This allows to validate against expired signers, test centres, etc.
+
+--Extra data thoughts
+Certificate token, if linked to a token (like baseline)
 
 3. Validate the challenge signature, using the certificate and the signed challenge, we will be able to validate if the user matches the one in the certificate.
 
@@ -68,6 +75,9 @@ The process of validating a certificate is the following.
 * Is the test centre id valid and has not been flagged as invalid test centre? (for example bad batch of test kits, batch could be added to the certificate)
 * Is the signer valid and included in the approved signers?
 * Is the certificate valid, and has not been forced to expiry? (ie further checks has invalidated the immunity)
+* Is the testKit id valid and not included in the expired ones
+* Is the challenge signed correctly by either the owner or the guardian?
+* Is the certficate signed by the approved signer?
 
 
 ### Physical validation
