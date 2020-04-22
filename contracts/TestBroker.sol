@@ -15,9 +15,15 @@ contract TestBroker {
         bytes32     centreName;
         bool        isActive;
         uint16      avgTimeForResultsInDays;
+        uint8       avgTestSpecifityRating;
+        uint8       avgTestSensitivtyRating;
+        bytes32[]   availableTestKitTypes;
         uint64      availabileTestSlots;
         uint64      capacityTestSlots;
         uint8       hotZoneLevel;
+        bool        acceptingRetestingApplicants;
+        uint        maxRetestsPerApplicant;
+        bool        acceptingPlasmaDonations;
         Coordinates location;
         bool        isValue;
     }
@@ -64,7 +70,10 @@ contract TestBroker {
     struct SampleKit {
         address signerAddress; // the sample centre signer
         bytes32 testCentreId; // the unique id of the test centre
+        bytes32 testKitType; // unique identifier of the testKitType
         bytes32 testKitId; // unique identifier of the testKitId, could be linked to a supply chain unique product batch id
+        uint8 specifityLevel; // rating of its specificity for COVID-19 antibodies (namely IgG and IgA)
+        uint8 sensitivityLevel; // raing of its overall sensitivity for antibodies
         int64 issuedDate; // when the testKitId was issued
         int64 sentDate; // when the testKitId was sent to the testing centre
         int64 receivedBackDate; // when the testKitId was received back from the testing centre
@@ -76,13 +85,15 @@ contract TestBroker {
     bytes32[] allSampleCentres;
     mapping(bytes32 => SampleCentre) sampleCentreMap;
 
+    //addresses that can administrate a samplecentre
+    mapping(bytes32 => mapping(address => bool)) public sampleCentreOwners;
+
     // Map of testing centres affilated with sample centre and their average cost per test
+    mapping(address => bool) public administrators;
     mapping(bytes32 => mapping(bytes32 => bytes32)) testingCentreAffiliates;
 
-    address admin;
-
     modifier onlyAdmin() {
-        require(msg.sender == admin, "The caller of this method does not have admin permission for this action.");
+        require(administrators[msg.sender], "The caller of this method does not have admin permission for this action.");
 
         // Do not forget the "_;"! It will
         // be replaced by the actual function
@@ -93,20 +104,19 @@ contract TestBroker {
     /// @dev Constructor for the broker
     /// @author Aaron Kendall
     constructor() public {
-        admin = msg.sender;
+        administrators[msg.sender] = true;
 
-        countryMap["United States of America"] = 
-            Country({ countryName: "United States of America", states: new bytes32[](0), isValue: true});
+        countryMap["United States of America"] = Country({ countryName: "United States of America", states: new bytes32[](0), isValue: true});
     }
 
     /// @dev This method will add a new SampleCentre
     /// @author Aaron Kendall
     function addSampleCentre(SampleCentre memory newCentre) public onlyAdmin {
 
-        require(sampleCentreMap[newCentre.centreName].isValue != true, "The sample centre already exists.");
+        require(sampleCentreMap[newCentre.centreId].isValue != true, "The sample centre already exists.");
 
-        allSampleCentres.push(newCentre.centreName);
-        sampleCentreMap[newCentre.centreName] = newCentre;
+        allSampleCentres.push(newCentre.centreId);
+        sampleCentreMap[newCentre.centreId] = newCentre;
 
         addSampleCentreToLocationCache(newCentre);
     }
@@ -115,7 +125,7 @@ contract TestBroker {
     /// @author Aaron Kendall
     function addSampleCentreToLocationCache(SampleCentre memory newCentre) public view onlyAdmin {
 
-        require(sampleCentreMap[newCentre.centreName].isValue != true, "The sample centre already exists.");
+        require(sampleCentreMap[newCentre.centreId].isValue != true, "The sample centre already exists.");
 
         // TODO
     }
@@ -166,9 +176,15 @@ contract TestBroker {
                     signerAddress: sampleCentreMap[allSampleCentres[idx]].signerAddress,
                     isActive: sampleCentreMap[allSampleCentres[idx]].isActive,
                     avgTimeForResultsInDays: sampleCentreMap[allSampleCentres[idx]].avgTimeForResultsInDays,
+                    avgTestSpecifityRating: sampleCentreMap[allSampleCentres[idx]].avgTestSpecifityRating,
+                    avgTestSensitivtyRating: sampleCentreMap[allSampleCentres[idx]].avgTestSensitivtyRating,
+                    availableTestKitTypes: sampleCentreMap[allSampleCentres[idx]].availableTestKitTypes,
                     availabileTestSlots: sampleCentreMap[allSampleCentres[idx]].availabileTestSlots,
                     capacityTestSlots: sampleCentreMap[allSampleCentres[idx]].capacityTestSlots,
                     hotZoneLevel: sampleCentreMap[allSampleCentres[idx]].hotZoneLevel,
+                    acceptingRetestingApplicants: sampleCentreMap[allSampleCentres[idx]].acceptingRetestingApplicants,
+                    maxRetestsPerApplicant: sampleCentreMap[allSampleCentres[idx]].maxRetestsPerApplicant,
+                    acceptingPlasmaDonations: sampleCentreMap[allSampleCentres[idx]].acceptingPlasmaDonations,
                     location: sampleCentreMap[allSampleCentres[idx]].location,
                     isValue: sampleCentreMap[allSampleCentres[idx]].isValue
                 });
@@ -180,16 +196,32 @@ contract TestBroker {
 
     /// @dev This method will update the sample centre information
     /// @author Aaron Kendall
-    function updateSampleCentre(SampleCentre memory updateCentre) public onlyAdmin {
+    function updateSampleCentre(SampleCentre memory updateCentre) public {
 
-        require(sampleCentreMap[updateCentre.centreName].isValue == true, "The sample centre does not exist.");
+        require(administrators[msg.sender] == true || sampleCentreOwners[updateCentre.centreId][msg.sender] == true, "Not enough permissions");
 
-        sampleCentreMap[updateCentre.centreName].signerAddress = updateCentre.signerAddress;
-        sampleCentreMap[updateCentre.centreName].isActive = updateCentre.isActive;
+        require(sampleCentreMap[updateCentre.centreId].isValue == true, "The sample centre does not exist.");
 
-        sampleCentreMap[updateCentre.centreName].avgTimeForResultsInDays = updateCentre.avgTimeForResultsInDays;
-        sampleCentreMap[updateCentre.centreName].availabileTestSlots = updateCentre.availabileTestSlots;
-        sampleCentreMap[updateCentre.centreName].capacityTestSlots = updateCentre.capacityTestSlots;
-        sampleCentreMap[updateCentre.centreName].hotZoneLevel = updateCentre.hotZoneLevel;
+        sampleCentreMap[updateCentre.centreId].signerAddress = updateCentre.signerAddress;
+        sampleCentreMap[updateCentre.centreId].isActive = updateCentre.isActive;
+
+        sampleCentreMap[updateCentre.centreId].avgTimeForResultsInDays = updateCentre.avgTimeForResultsInDays;
+        sampleCentreMap[updateCentre.centreId].avgTestSpecifityRating = updateCentre.avgTestSpecifityRating;
+        sampleCentreMap[updateCentre.centreId].avgTestSensitivtyRating = updateCentre.avgTestSensitivtyRating;
+        sampleCentreMap[updateCentre.centreId].availableTestKitTypes = updateCentre.availableTestKitTypes;
+        sampleCentreMap[updateCentre.centreId].availabileTestSlots = updateCentre.availabileTestSlots;
+        sampleCentreMap[updateCentre.centreId].capacityTestSlots = updateCentre.capacityTestSlots;
+        sampleCentreMap[updateCentre.centreId].hotZoneLevel = updateCentre.hotZoneLevel;
+        sampleCentreMap[updateCentre.centreId].acceptingRetestingApplicants = updateCentre.acceptingRetestingApplicants;
+        sampleCentreMap[updateCentre.centreId].maxRetestsPerApplicant = updateCentre.maxRetestsPerApplicant;
+        sampleCentreMap[updateCentre.centreId].acceptingPlasmaDonations = updateCentre.acceptingPlasmaDonations;
     }
+
+    function upsertSampleCentreOwner(bytes32 sampleCentreId, address sampleCentreOwner, bool isOwner) public {
+        // multisig
+        require(administrators[msg.sender] == true || sampleCentreOwners[sampleCentreId][msg.sender] == true, "Not enough permissions");
+
+        sampleCentreOwners[sampleCentreId][sampleCentreOwner] = isOwner;
+    }
+
 }
