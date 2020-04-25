@@ -24,6 +24,8 @@ contract TestBroker {
         bool        acceptingRetestingApplicants;
         uint        maxRetestsPerApplicant;
         bool        acceptingPlasmaDonations;
+        bool        isPopupCentre;
+        bool        driveThruPossible;
         Coordinates location;
         bool        isValue;
     }
@@ -184,6 +186,8 @@ contract TestBroker {
                     hotZoneLevel: sampleCentreMap[allSampleCentres[idx]].hotZoneLevel,
                     acceptingRetestingApplicants: sampleCentreMap[allSampleCentres[idx]].acceptingRetestingApplicants,
                     maxRetestsPerApplicant: sampleCentreMap[allSampleCentres[idx]].maxRetestsPerApplicant,
+                    isPopupCentre: sampleCentreMap[allSampleCentres[idx]].isPopupCentre,
+                    driveThruPossible: sampleCentreMap[allSampleCentres[idx]].driveThruPossible,
                     acceptingPlasmaDonations: sampleCentreMap[allSampleCentres[idx]].acceptingPlasmaDonations,
                     location: sampleCentreMap[allSampleCentres[idx]].location,
                     isValue: sampleCentreMap[allSampleCentres[idx]].isValue
