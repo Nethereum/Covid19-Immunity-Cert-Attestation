@@ -21,7 +21,7 @@ As we have seen, many people have died in hospital and residences, the problem i
 Obviously there are many other scenarios like returning to work, resuming live events and big crowd gatherings ...
 
 ## What is a COVID19 immunity certificate
-An immunity certificate provides a confirmation that a person has tested positive (only) for the IgM antibodies. Please see diagram of the different types of test results used in the hospital La Paz (Madrid). (To be translated from Spanish)
+An immunity certificate provides a confirmation that a person has tested positive (only) for the IgG antibodies. Please see diagram of the different types of test results used in the hospital La Paz (Madrid). (To be translated from Spanish)
 
 ![Test results diagram'](/docResources/TestResults-Meaning-Spanish.jpg "Testing results diagram")
 
