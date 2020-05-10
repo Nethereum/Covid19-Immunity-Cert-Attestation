@@ -21,7 +21,7 @@ As we have seen, many people have died in hospital and residences, the problem i
 Obviously there are many other scenarios like returning to work, resuming live events and big crowd gatherings ...
 
 ## What is a COVID19 immunity certificate
-An immunity certificate provides a confirmation that a person has tested positive (only) for the lgG antibodies. Please see diagram of the different types of test results used in the hospital La Paz (Madrid). (To be translated from Spanish)
+An immunity certificate provides a confirmation that a person has tested positive (only) for the igG antibodies. Please see diagram of the different types of test results used in the hospital La Paz (Madrid). (To be translated from Spanish)
 
 ![Test results diagram'](/docResources/TestResults-Meaning-Spanish.jpg "Testing results diagram")
 
@@ -64,7 +64,7 @@ The process of validating a certificate is the following.
 * Guardian(s), if the person has a disability or is a minor a list of people that can be used as user signers.
 * Testing kit id: Unique identifier of the testing kit, as we have seen some testing kits have proven to give invalid results. (A supply chain link )
 * Certificate expiry date. We don't know how long the antibodies will last, so continuous check to validate antibodies, studies like this indicates that they can last 3 years on previous coronavirus https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2851497/, although other papers indicate 1 year.
-* Certficate creation date. This allows to validate against expired signers, test centres, etc.
+* Certificate creation date. This allows to validate against expired signers, test centres, etc.
 
 --Extra data thoughts
 Certificate token, if linked to a token (like baseline)
